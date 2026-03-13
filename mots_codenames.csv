@@ -1,1 +1,91 @@
-
+Mot,Categorie,Note_Educative
+Wikipedia,Plateformes,Encyclopédie collaborative mondiale.
+GitHub,Plateformes,Hébergement de code et collaboration.
+Linux,Logiciels,Système d'exploitation libre et ouvert.
+Firefox,Logiciels,Navigateur web respectueux de la vie privée.
+Reddit,Plateformes,Réseau social basé sur des communautés (subreddits).
+Discord,Plateformes,Outil de communication par serveurs thématiques.
+Contributeur,Roles,Personne qui apporte du contenu ou du code.
+Moderateur,Roles,Garant du respect des règles de la communauté.
+Benevole,Roles,Acteur non rémunéré agissant pour le bien commun.
+Administrateur,Roles,Gestionnaire des droits et de l'infrastructure.
+Novice,Roles,Nouvel arrivant dans une communauté (ou 'Newbie').
+Mentor,Roles,Membre expérimenté qui guide les débutants.
+Troll,Risques,Individu cherchant à générer des conflits.
+Spammeur,Risques,Envoyeur de messages indésirables en masse.
+Copyright,Droit,Droit d'auteur classique (souvent opposé au Copyleft).
+Domaine public,Droit,Contenu libre de tout droit d'auteur.
+Partage,Valeurs,Action de mettre en commun une ressource.
+Collaboration,Valeurs,Travail en commun pour un objectif partagé.
+Consensus,Gouvernance,Accord général au sein d'un groupe.
+Vote,Gouvernance,Outil de prise de décision collective.
+Conflit,Gouvernance,Désaccord à résoudre au sein du groupe.
+Gouvernance,Gouvernance,Ensemble des règles de gestion d'un projet.
+Regles,Gouvernance,Cadre à respecter pour le bon fonctionnement.
+Charte,Gouvernance,Texte définissant les valeurs de la communauté.
+Inclusion,Ethique,Action de s'ouvrir à tous les profils.
+Exclusion,Ethique,Action de bannir un membre suite à une faute.
+Reputation,Social,Score de confiance accordé par les pairs.
+Decentralisation,Concept,Répartition du pouvoir sans autorité centrale.
+Reseau,Technique,Ensemble de nœuds connectés entre eux.
+Noeud,Technique,Point de connexion dans un réseau.
+Pair,Technique,Membre ayant les mêmes droits que les autres (P2P).
+Protocole,Technique,Règles permettant à deux machines de communiquer.
+Torrent,Technique,Protocole de partage de fichiers décentralisé.
+Blockchain,Technique,Registre numérique sécurisé et partagé.
+Anonymat,Ethique,Possibilité d'agir sans révéler son identité.
+Confiance,Social,Base de l'économie collaborative entre inconnus.
+Documentation,Travail,Trace écrite expliquant le fonctionnement.
+Traduction,Travail,Adaptation du contenu en d'autres langues.
+Relecture,Travail,Vérification du travail d'un autre membre.
+Correction,Travail,Action de réparer une erreur ou un bug.
+Amelioration,Travail,Optimisation d'un contenu existant.
+Fusion,Technique,Action de réunir deux versions d'un travail (Merge).
+Revision,Travail,Modification d'un contenu pour le mettre à jour.
+Qualite,Valeurs,Niveau d'exigence d'un projet collaboratif.
+Validation,Travail,Approbation finale avant publication.
+Archivage,Travail,Conservation d'anciennes versions pour l'historique.
+YouTube,Plateformes,Hébergement de vidéos avec monétisation.
+Twitter/X,Plateformes,Réseau social de micro-blogging.
+Twitch,Plateformes,Plateforme de streaming en direct.
+Zoom,Plateformes,Logiciel de visioconférence.
+WhatsApp,Plateformes,Messagerie instantanée grand public.
+Telegram,Plateformes,Messagerie sécurisée avec canaux et bots.
+Abonne,Roles,Utilisateur qui suit un créateur ou une page.
+Fondateur,Roles,Créateur original du projet ou de la plateforme.
+Createur,Roles,Personne produisant du contenu original.
+Lecteur,Roles,Consommateur passif de contenu.
+Visiteur,Roles,Utilisateur de passage non inscrit.
+Expert,Roles,Personne possédant des compétences pointues.
+Debutant,Roles,Personne en phase d'apprentissage.
+Leader,Roles,Personne qui impulse une direction au projet.
+Like,Actions,Action d'approuver un contenu.
+Partager,Actions,Action de diffuser un contenu à son réseau.
+Commenter,Actions,Action d'écrire un avis sous un contenu.
+Publier,Actions,Action de rendre un contenu visible de tous.
+Signaler,Actions,Action de rapporter un contenu inapproprié.
+Bloquer,Actions,Action d'empêcher un utilisateur d'interagir.
+Inviter,Actions,Action de proposer à quelqu'un de rejoindre.
+Rejoindre,Actions,Action d'entrer dans une communauté.
+Quitter,Actions,Action de sortir d'un groupe ou d'une plateforme.
+Gratuit,Economie,Modèle sans échange monétaire direct.
+Ouvert,Economie,Projet dont les sources ou l'accès sont libres.
+Ferme,Economie,Système propriétaire avec accès restreint.
+Public,Economie,Accessible à n'importe quel internaute.
+Prive,Economie,Réservé à un groupe restreint ou à soi-même.
+Licence,Droit,Contrat fixant les conditions d'utilisation.
+Acces,Droit,Possibilité d'utiliser une ressource.
+Liberte,Valeurs,Droit de copier, modifier et distribuer.
+Transparence,Valeurs,Visibilité des décisions et des comptes.
+Securite,Technique,Protection des données et des utilisateurs.
+Mot de passe,Technique,Clé d'accès personnelle à un compte.
+Identite,Social,Profil numérique d'un utilisateur.
+Mise a jour,Technique,Nouvelle version apportant des corrections.
+Telechargement,Technique,Action de récupérer un fichier sur son appareil.
+Lien,Technique,Point de passage d'une page à une autre.
+Serveur,Technique,Ordinateur qui stocke et distribue les données.
+Profil,Social,Page regroupant les informations d'un membre.
+Compte,Social,Espace personnel sécurisé sur une plateforme.
+Message,Actions,Unité de base de la communication.
+Forum,Plateformes,Espace de discussion asynchrone par thèmes.
+Badge,Social,Récompense visuelle soulignant un accomplissement.
