@@ -91,7 +91,6 @@ Listes de mots du jeux :
 - Compte
 - Message
 - Forum
-
-Badge
+- Badge
 
 
