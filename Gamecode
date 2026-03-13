@@ -1,1 +1,411 @@
+Structure HTML & Styles CSS : 
+Cette section contient la déclaration du document HTML, les imports de polices (Space Mono et Outfit via Google Fonts) et l’intégralité des styles CSS. Les variables CSS définies dans :root permettent de maintenir une cohérence visuelle (couleurs des équipes, surfaces, textes). Le design utilise un thème sombre avec des accents bleu et rouge.
 
+<!DOCTYPE html>
+   2  <html lang="fr">
+   3  <head>
+   4  <meta charset="UTF-8">
+   5  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   6  <title>CodeSource — Le Jeu des Noms de Code Tech</title>
+   7  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Outfit:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
+   8  <style>
+   9  *{margin:0;padding:0;box-sizing:border-box}
+  10  :root{
+  11    --bg:#0a0e17;--surface:#111827;--surface2:#1a2332;
+  12    --blue:#3b82f6;--blue-dim:#1e3a5f;--blue-glow:rgba(59,130,246,.25);
+  13    --red:#ef4444;--red-dim:#5f1e1e;--red-glow:rgba(239,68,68,.25);
+  14    --neutral:#64748b;--neutral-dim:#2d3748;
+  15    --assassin:#000;--assassin-border:#dc2626;
+  16    --text:#e2e8f0;--text-dim:#94a3b8;--text-dark:#475569;
+  17    --gold:#f59e0b;--green:#10b981;
+  18    --font-mono:'Space Mono',monospace;--font-sans:'Outfit',sans-serif;
+  19  }
+  20  html,body{height:100%;font-family:var(--font-sans);background:var(--bg);color:var(--text);overflow-x:hidden}
+  21  body{display:flex;flex-direction:column;min-height:100vh}
+  22  
+  23  /* ── SPLASH SCREEN ── */
+  24  .splash{position:fixed;inset:0;z-index:1000;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:28px;transition:opacity .6s,visibility .6s}
+  25  .splash.hidden{opacity:0;visibility:hidden;pointer-events:none}
+  26  .splash h1{font-size:clamp(2.2rem,6vw,4.5rem);font-weight:900;letter-spacing:-2px;background:linear-gradient(135deg,var(--blue),#a78bfa,var(--red));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+  27  .splash p{color:var(--text-dim);font-size:1.05rem;max-width:520px;text-align:center;line-height:1.6}
+  28  .splash .rules{text-align:left;background:var(--surface);border:1px solid rgba(255,255,255,.06);border-radius:14px;padding:22px 28px;max-width:580px;font-size:.92rem;line-height:1.7;color:var(--text-dim)}
+  29  .splash .rules strong{color:var(--text)}
+  30  .splash .rules .color-dot{display:inline-block;width:11px;height:11px;border-radius:50%;margin-right:4px;vertical-align:-1px}
+  31  .splash .rules .color-dot.b{background:var(--blue)}.splash .rules .color-dot.r{background:var(--red)}.splash .rules .color-dot.n{background:var(--neutral)}.splash .rules .color-dot.a{background:var(--assassin);border:2px solid var(--assassin-border)}
+  32  .btn{font-family:var(--font-sans);font-weight:700;font-size:1rem;border:none;border-radius:10px;padding:14px 36px;cursor:pointer;transition:all .2s;letter-spacing:.3px}
+  33  .btn-start{background:linear-gradient(135deg,var(--blue),#6366f1);color:#fff;box-shadow:0 4px 24px rgba(99,102,241,.35)}
+  34  .btn-start:hover{transform:translateY(-2px);box-shadow:0 6px 32px rgba(99,102,241,.5)}
+  35  .btn-sm{padding:8px 18px;font-size:.82rem;border-radius:8px}
+  36  .btn-outline{background:transparent;border:1.5px solid rgba(255,255,255,.15);color:var(--text-dim)}
+  37  .btn-outline:hover{border-color:var(--blue);color:var(--blue)}
+  38  
+  39  /* ── TOP BAR ── */
+  40  .topbar{display:flex;align-items:center;justify-content:space-between;padding:12px 20px;background:var(--surface);border-bottom:1px solid rgba(255,255,255,.05)}
+  41  .topbar .logo{font-family:var(--font-mono);font-weight:700;font-size:1.1rem;letter-spacing:-1px}
+  42  .topbar .logo span{color:var(--blue)}
+  43  .score-area{display:flex;gap:16px;align-items:center}
+  44  .score-pill{display:flex;align-items:center;gap:6px;padding:5px 14px;border-radius:20px;font-weight:700;font-size:.9rem}
+  45  .score-pill.blue{background:var(--blue-dim);color:var(--blue)}.score-pill.red{background:var(--red-dim);color:var(--red)}
+  46  .turn-badge{padding:5px 14px;border-radius:20px;font-weight:600;font-size:.82rem;animation:pulse 2s infinite}
+  47  .turn-badge.blue{background:var(--blue-dim);color:var(--blue);border:1px solid var(--blue)}.turn-badge.red{background:var(--red-dim);color:var(--red);border:1px solid var(--red)}
+  48  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.65}}
+  49  
+  50  /* ── SPYMASTER BAR ── */
+  51  .spy-bar{display:flex;align-items:center;justify-content:center;gap:12px;padding:10px 20px;background:rgba(245,158,11,.06);border-bottom:1px solid rgba(245,158,11,.12)}
+  52  .spy-bar label{font-size:.85rem;color:var(--gold);font-weight:600}
+  53  .toggle{position:relative;width:44px;height:24px;cursor:pointer}
+  54  .toggle input{display:none}
+  55  .toggle .slider{position:absolute;inset:0;background:var(--neutral-dim);border-radius:12px;transition:.3s}
+  56  .toggle .slider::before{content:'';position:absolute;width:18px;height:18px;left:3px;top:3px;background:var(--text-dim);border-radius:50%;transition:.3s}
+  57  .toggle input:checked+.slider{background:var(--gold)}.toggle input:checked+.slider::before{transform:translateX(20px);background:#fff}
+  58  
+  59  /* ── HINT AREA ── */
+  60  .hint-area{display:flex;align-items:center;justify-content:center;gap:12px;padding:10px 20px;background:var(--surface2);border-bottom:1px solid rgba(255,255,255,.04)}
+  61  .hint-area input{font-family:var(--font-mono);background:var(--surface);border:1.5px solid rgba(255,255,255,.1);color:var(--text);padding:8px 14px;border-radius:8px;font-size:.9rem;width:180px;text-align:center}
+  62  .hint-area input::placeholder{color:var(--text-dark)}
+  63  .hint-area input[type=number]{width:60px}
+  64  .hint-display{font-family:var(--font-mono);font-size:1.1rem;font-weight:700;color:var(--gold);letter-spacing:1px}
+  65  
+  66  /* ── GRID ── */
+  67  .grid-wrap{flex:1;display:flex;align-items:center;justify-content:center;padding:16px}
+  68  .grid{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;max-width:960px;width:100%}
+  69  .card{position:relative;aspect-ratio:1.6;border-radius:12px;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:8px 6px;border:2px solid rgba(255,255,255,.08);background:var(--surface2);transition:all .25s;overflow:hidden;user-select:none}
+  70  .card:hover:not(.revealed){transform:translateY(-3px);border-color:rgba(255,255,255,.18);box-shadow:0 8px 24px rgba(0,0,0,.3)}
+  71  .card .card-name{font-weight:700;font-size:clamp(.6rem,1.4vw,.88rem);line-height:1.2;z-index:1;padding:0 2px;word-break:break-word}
+  72  .card .card-family{font-size:.6rem;color:var(--text-dark);margin-top:4px;font-weight:600;text-transform:uppercase;letter-spacing:.5px;z-index:1}
+  73  .card .card-period{font-size:.55rem;color:var(--text-dark);margin-top:2px;z-index:1;opacity:.7}
+  74  
+  75  /* Spymaster colors */
+  76  .card.spy-blue{border-color:var(--blue);box-shadow:inset 0 0 20px var(--blue-glow)}
+  77  .card.spy-blue::after{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--blue)}
+  78  .card.spy-red{border-color:var(--red);box-shadow:inset 0 0 20px var(--red-glow)}
+  79  .card.spy-red::after{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--red)}
+  80  .card.spy-neutral{border-color:var(--neutral);opacity:.7}
+  81  .card.spy-assassin{border-color:var(--assassin-border);background:repeating-linear-gradient(45deg,var(--surface2),var(--surface2) 4px,rgba(220,38,38,.06) 4px,rgba(220,38,38,.06) 8px)}
+  82  
+  83  /* Revealed */
+  84  .card.revealed{cursor:default;transform:none !important}
+  85  .card.revealed.team-blue{background:linear-gradient(135deg,var(--blue-dim),rgba(59,130,246,.15));border-color:var(--blue)}
+  86  .card.revealed.team-blue .card-name{color:var(--blue)}
+  87  .card.revealed.team-red{background:linear-gradient(135deg,var(--red-dim),rgba(239,68,68,.15));border-color:var(--red)}
+  88  .card.revealed.team-red .card-name{color:var(--red)}
+  89  .card.revealed.team-neutral{background:var(--neutral-dim);border-color:var(--neutral);opacity:.5}
+  90  .card.revealed.team-neutral .card-name{color:var(--neutral)}
+  91  .card.revealed.team-assassin{background:linear-gradient(135deg,#1a0000,#2d0000);border-color:var(--assassin-border)}
+  92  .card.revealed.team-assassin .card-name{color:var(--red);text-decoration:line-through}
+  93  
+  94  .card .reveal-icon{position:absolute;top:6px;right:8px;font-size:.8rem;opacity:0;transition:opacity .3s}
+  95  .card.revealed .reveal-icon{opacity:1}
+  96  
+  97  /* ── INFO TOOLTIP ── */
+  98  .card .tooltip{position:absolute;bottom:100%;left:50%;transform:translateX(-50%);background:#1e293b;border:1px solid rgba(255,255,255,.1);border-radius:10px;padding:10px 14px;width:220px;font-size:.75rem;line-height:1.5;color:var(--text-dim);pointer-events:none;opacity:0;transition:opacity .2s;z-index:50;box-shadow:0 8px 24px rgba(0,0,0,.4)}
+  99  .card:hover .tooltip{opacity:1}
+ 100  .tooltip strong{color:var(--text);display:block;margin-bottom:3px}
+ 101  
+ 102  /* ── MODAL ── */
+ 103  .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:500;display:flex;align-items:center;justify-content:center;opacity:0;visibility:hidden;transition:all .3s}
+ 104  .modal-overlay.show{opacity:1;visibility:visible}
+ 105  .modal{background:var(--surface);border:1px solid rgba(255,255,255,.08);border-radius:18px;padding:36px;text-align:center;max-width:420px;width:90%}
+ 106  .modal h2{font-size:1.8rem;margin-bottom:8px}
+ 107  .modal p{color:var(--text-dim);margin-bottom:20px}
+ 108  .modal .winner-blue{color:var(--blue)}.modal .winner-red{color:var(--red)}
+ 109  
+ 110  /* ── FOOTER LOG ── */
+ 111  .log-bar{padding:8px 20px;background:var(--surface);border-top:1px solid rgba(255,255,255,.05);font-size:.78rem;color:var(--text-dark);font-family:var(--font-mono);overflow-x:auto;white-space:nowrap;display:flex;gap:16px}
+ 112  .log-entry{opacity:.7}.log-entry:last-child{opacity:1;color:var(--text-dim)}
+ 113  
+ 114  /* ── RESPONSIVE ── */
+ 115  @media(max-width:700px){
+ 116    .grid{grid-template-columns:repeat(5,1fr);gap:6px;max-width:100%}
+ 117    .card{padding:5px 3px;border-radius:8px;aspect-ratio:1.3}
+ 118    .card .card-name{font-size:.55rem}
+ 119    .card .card-family,.card .card-period{display:none}
+ 120    .card .tooltip{display:none}
+ 121    .hint-area{flex-wrap:wrap}
+ 122  }
+ 123  </style>
+
+
+Structure HTML du jeu : 
+Le corps HTML contient tous les éléments visuels du jeu : l’écran d’accueil (splash) avec les règles, la barre supérieure avec scores et boutons, la barre du Maître-Espion, la zone de saisie des indices, la grille de jeu et la modale de fin de partie.
+
+1  
+   2  <body>
+   3  
+   4  <!-- SPLASH -->
+   5  <div class="splash" id="splash">
+   6    <h1>CodeSource</h1>
+   7    <p>Un jeu de type <strong>Codenames</strong> pour apprendre l'histoire de l'open source, du numérique et de l'IA</p>
+   8    <div class="rules">
+   9      <strong>Règles du jeu :</strong><br><br>
+  10      Deux équipes s'affrontent : <span class="color-dot b"></span><strong>Bleu</strong> et <span class="color-dot r"></span><strong>Rouge</strong>.<br><br>
+  11      Le <strong>Maître-Espion</strong> de chaque équipe voit la grille secrète et donne un <strong>indice</strong> (un mot + un chiffre) pour faire deviner plusieurs cartes à son équipe.<br><br>
+  12      <span class="color-dot b"></span> <strong>9 cartes bleues</strong> — <span class="color-dot r"></span> <strong>8 cartes rouges</strong> — <span class="color-dot n"></span> 7 cartes neutres — <span class="color-dot a"></span> 1 carte assassin<br><br>
+  13      Si une équipe révèle la carte <strong>Assassin</strong>, elle perd immédiatement ! Chaque carte représente un concept clé de l'histoire du numérique et de l'open source — survolez-les pour apprendre.
+  14    </div>
+  15    <button class="btn btn-start" onclick="startGame()">Commencer la partie</button>
+  16  </div>
+  17  
+  18  <!-- GAME -->
+  19  <div class="topbar">
+  20    <div class="logo">&lt;<span>Code</span>Source/&gt;</div>
+  21    <div class="score-area">
+  22      <div class="score-pill blue" id="scoreBlue">Bleu: 9</div>
+  23      <div class="turn-badge blue" id="turnBadge">Tour : Bleu</div>
+  24      <div class="score-pill red" id="scoreRed">Rouge: 8</div>
+  25    </div>
+  26    <div style="display:flex;gap:8px">
+  27      <button class="btn btn-sm btn-outline" onclick="passTurn()">Passer le tour</button>
+  28      <button class="btn btn-sm btn-outline" onclick="newGame()">Nouvelle partie</button>
+  29    </div>
+  30  </div>
+  31  
+  32  <div class="spy-bar">
+  33    <label>Mode Maître-Espion</label>
+  34    <label class="toggle"><input type="checkbox" id="spyToggle" onchange="toggleSpy()"><span class="slider"></span></label>
+  35  </div>
+  36  
+  37  <div class="hint-area" id="hintArea">
+  38    <input type="text" id="hintWord" placeholder="Indice…">
+  39    <input type="number" id="hintNum" min="0" max="9" value="2" placeholder="#">
+  40    <button class="btn btn-sm btn-start" onclick="giveHint()">Donner l'indice</button>
+  41    <div class="hint-display" id="hintDisplay"></div>
+  42  </div>
+  43  
+  44  <div class="grid-wrap">
+  45    <div class="grid" id="grid"></div>
+  46  </div>
+  47  
+  48  <div class="log-bar" id="logBar">
+  49    <span class="log-entry">Partie prête…</span>
+  50  </div>
+  51  
+  52  <!-- WIN MODAL -->
+  53  <div class="modal-overlay" id="modal">
+  54    <div class="modal">
+  55      <h2 id="modalTitle">Victoire !</h2>
+  56      <p id="modalMsg"></p>
+  57      <button class="btn btn-start" onclick="newGame();document.getElementById('modal').classList.remove('show')">Rejouer</button>
+  58    </div>
+  59  </div>
+  60  
+  61  
+
+
+Logique JavaScript
+Le JavaScript contient les données des 73 cartes (tableau ALL_CARDS extrait du CSV), les fonctions utilitaires (mélange aléatoire, sélection de 25 cartes, attribution des équipes), le rendu de la grille avec tooltips, et toute la logique de jeu : révélation des cartes, gestion des tours, système d’indices et détection de victoire/défaite.
+
+1  
+   2  // ── DATA ──
+   3  const ALL_CARDS = [{"name":"SHARE & DECUS","period":"Early Open Sharing","description":"Early software-sharing communities","family":"Organizational","depends":""},{"name":"UNIVAC A-2 System","period":"Early Open Sharing","description":"First open-source software","family":"Technological","depends":""},{"name":"ARPANET","period":"Early Open Sharing","description":"Predecessor to the internet","family":"Networking","depends":""},{"name":"TeX & SPICE","period":"Free Software Movement","description":"Academic computing tools","family":"Technological","depends":"SHARE & DECUS"},{"name":"Software Licensing","period":"Commercialization","description":"Legal control over software","family":"Legal","depends":"ARPANET"},{"name":"IBM Closed Source Policy","period":"Commercialization","description":"Restricted access to software","family":"Licensing","depends":"Software Licensing"},{"name":"Shrink-Wrap Licenses","period":"Commercialization","description":"Proprietary software distribution","family":"Licensing","depends":"IBM Closed Source Policy"},{"name":"UNIX Commercialization","period":"Commercialization","description":"UNIX sold as proprietary software","family":"Technological","depends":""},{"name":"GNU Project","period":"Free Software Movement","description":"Started free software movement","family":"Organizational","depends":"UNIX Commercialization"},{"name":"Copyleft","period":"Free Software Movement","description":"Ensured software remains free","family":"Licensing","depends":"GNU Project"},{"name":"Free Software Foundation","period":"Free Software Movement","description":"Organization for free software","family":"Organizational","depends":"Copyleft"},{"name":"Linux Kernel","period":"Rise of Open Source","description":"Free open-source operating system","family":"Technological","depends":"Free Software Foundation"},{"name":"Debian & Package Mgmt","period":"Rise of Open Source","description":"Standardized Linux distribution","family":"Infrastructure","depends":"Linux Kernel"},{"name":"Apache Web Server","period":"Rise of Open Source","description":"First major open-source web server","family":"Infrastructure","depends":"ARPANET"},{"name":"Open Source Initiative","period":"Rise of Open Source","description":"Rebranded free software movement","family":"Organizational","depends":"Free Software Foundation"},{"name":"Mozilla & Netscape","period":"Rise of Open Source","description":"First major open-source browser","family":"Technological","depends":"Open Source Initiative"},{"name":"Git & GitHub","period":"Mainstream Adoption","description":"Revolutionized open-source collaboration","family":"Technological","depends":"Linux Kernel"},{"name":"Android","period":"Mainstream Adoption","description":"Open-source mobile operating system","family":"Technological","depends":"Linux Kernel"},{"name":"Microsoft Open Source","period":"Mainstream Adoption","description":"Corporate adoption of open-source","family":"Cultural","depends":"Open Source Initiative"},{"name":"SCO v. IBM","period":"Mainstream Adoption","description":"Legal battles over open-source","family":"Legal","depends":"Open Source Initiative"},{"name":"Docker","period":"Mainstream Adoption","description":"Lightweight virtualization technology","family":"Infrastructure","depends":"Linux Kernel"},{"name":"Cloud Computing","period":"Modern Open Source","description":"Scalable distributed computing","family":"Infrastructure","depends":"Linux Kernel"},{"name":"AI & TensorFlow","period":"Modern Open Source","description":"Open-source artificial intelligence","family":"Technological","depends":"Free Software Foundation"},{"name":"GitHub Acquisition","period":"Modern Open Source","description":"Microsoft embraces open-source","family":"Cultural","depends":"Git & GitHub"},{"name":"Blockchain","period":"Modern Open Source","description":"Decentralized financial systems","family":"Technological","depends":"Open Source Initiative"},{"name":"Linux Domination","period":"Modern Open Source","description":"Leading OS for servers","family":"Infrastructure","depends":"Linux Kernel"},{"name":"Free Tech Sharing","period":"Early Open Sharing","description":"Open exchange of knowledge to encourage innovation","family":"Cultural","depends":""},{"name":"Public Domain Software","period":"Early Open Sharing","description":"Software with no copyright restrictions","family":"Infrastructure","depends":""},{"name":"IBM Mainframe","period":"Commercialization","description":"Powerful computers for enterprise computing","family":"Technological","depends":""},{"name":"IBM 701","period":"Commercialization","description":"IBM's first commercial scientific computer (1952)","family":"Technological","depends":"IBM Mainframe"},{"name":"Proprietary Software","period":"Commercialization","description":"Software under restrictive licenses","family":"Licensing","depends":""},{"name":"Copyrights & Patents","period":"Commercialization","description":"Intellectual property protection","family":"Legal","depends":"Proprietary Software"},{"name":"Trademarks","period":"Commercialization","description":"Legal brand distinction","family":"Legal","depends":"Copyrights & Patents"},{"name":"Leasing Contracts","period":"Commercialization","description":"Software usage agreements","family":"Organizational","depends":"Proprietary Software"},{"name":"Monopolization","period":"Commercialization","description":"Single company market domination","family":"Organizational","depends":"Proprietary Software"},{"name":"Open Source","period":"Free Software Movement","description":"Publicly available source code","family":"Infrastructure","depends":""},{"name":"Sourceware","period":"Free Software Movement","description":"Proposed term for free source code","family":"Infrastructure","depends":"Open Source"},{"name":"Non-Profit Orgs","period":"Rise of Open Source","description":"Funding for community projects","family":"Organizational","depends":"Open Source"},{"name":"Software","period":"Mainstream Adoption","description":"Instructions for computers","family":"Technological","depends":""},{"name":"Programming","period":"Mainstream Adoption","description":"Writing code for computers","family":"Technological","depends":"Software"},{"name":"Hacking","period":"Modern Open Source","description":"Unauthorized system access","family":"Cultural","depends":""},{"name":"UNIVAC","period":"Early Open Sharing","description":"Premier ordinateur commercialisé (1951)","family":"Technological","depends":""},{"name":"Operating Systems","period":"Early Open Sharing","description":"Resource management software","family":"Technological","depends":"UNIVAC"},{"name":"Compilers","period":"Commercialization","description":"Source-to-machine code translation","family":"Technological","depends":""},{"name":"Interpreters","period":"Commercialization","description":"Line-by-line code execution","family":"Technological","depends":""},{"name":"Unix","period":"Commercialization","description":"Multi-user OS from the 1970s","family":"Technological","depends":""},{"name":"The Copyleft Commons","period":"Free Software Movement","description":"Keeping derivatives free via GPL","family":"Legal","depends":"Copyleft"},{"name":"SHARE Users Group","period":"Early Open Sharing","description":"IBM software sharing community (1955)","family":"Organizational","depends":"UNIVAC"},{"name":"Usenet & UUCPNet","period":"Free Software Movement","description":"Early programmer sharing networks","family":"Infrastructure","depends":"Unix"},{"name":"GNU OS","period":"Free Software Movement","description":"Stallman's free operating system (1983)","family":"Technological","depends":"Unix"},{"name":"Debian GNU","period":"Rise of Open Source","description":"Free-principled Linux distro (1993)","family":"Infrastructure","depends":"GNU OS"},{"name":"MySQL","period":"Rise of Open Source","description":"Popular open-source database engine","family":"Technological","depends":"Debian GNU"},{"name":"Python","period":"Rise of Open Source","description":"Versatile programming language (1991)","family":"Technological","depends":"Interpreters"},{"name":"Ruby","period":"Rise of Open Source","description":"Dynamic object-oriented language","family":"Technological","depends":"Interpreters"},{"name":"Scala","period":"Mainstream Adoption","description":"OOP + functional programming","family":"Technological","depends":"Java"},{"name":"Java","period":"Rise of Open Source","description":"Enterprise OOP language (1995)","family":"Technological","depends":""},{"name":"ActionScript","period":"Rise of Open Source","description":"Interactive web applications","family":"Technological","depends":""},{"name":"C#","period":"Mainstream Adoption","description":"Microsoft's .NET language","family":"Technological","depends":"Java"},{"name":"Java Platform","period":"Rise of Open Source","description":"Java development & execution platform","family":"Technological","depends":"Java"},{"name":"Fedora","period":"Mainstream Adoption","description":"Red Hat community Linux distro","family":"Infrastructure","depends":"Linux Kernel"},{"name":"Ubuntu","period":"Mainstream Adoption","description":"User-friendly Debian-based Linux","family":"Infrastructure","depends":"Debian GNU"},{"name":"OpenJDK","period":"Mainstream Adoption","description":"Open-source Java implementation","family":"Technological","depends":"Java"},{"name":"GNU","period":"Free Software Movement","description":"Stallman's free system project","family":"Organizational","depends":"Unix"},{"name":"Git","period":"Mainstream Adoption","description":"Distributed version control system","family":"Technological","depends":"Linux Kernel"},{"name":"Chromebooks","period":"Modern Open Source","description":"Linux-based laptop computers","family":"Technological","depends":"Linux Kernel"}];
+   4  
+   5  // ── STATE ──
+   6  let board = [];
+   7  let turn = 'blue'; // 'blue' | 'red'
+   8  let blueLeft = 9, redLeft = 8;
+   9  let spyMode = false;
+  10  let guessesLeft = 0;
+  11  let hintActive = false;
+  12  let gameOver = false;
+  13  let logs = [];
+  14  
+  15  // ── UTILS ──
+  16  function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+  17  
+  18  function pickCards(){
+  19    const shuffled = shuffle([...ALL_CARDS]);
+  20    return shuffled.slice(0, 25);
+  21  }
+  22  
+  23  function assignTeams(){
+  24    // 9 blue, 8 red, 7 neutral, 1 assassin
+  25    const types = [];
+  26    for(let i=0;i<9;i++) types.push('blue');
+  27    for(let i=0;i<8;i++) types.push('red');
+  28    for(let i=0;i<7;i++) types.push('neutral');
+  29    types.push('assassin');
+  30    return shuffle(types);
+  31  }
+  32  
+  33  // ── PERIOD COLORS ──
+  34  const periodColors = {
+  35    'Early Open Sharing':'#10b981',
+  36    'Commercialization':'#f59e0b',
+  37    'Free Software Movement':'#8b5cf6',
+  38    'Rise of Open Source':'#3b82f6',
+  39    'Mainstream Adoption':'#ec4899',
+  40    'Modern Open Source':'#06b6d4'
+  41  };
+  42  
+  43  const familyIcons = {
+  44    'Technological':'⚙️','Infrastructure':'🏗️','Organizational':'🏛️',
+  45    'Legal':'⚖️','Licensing':'📜','Cultural':'🌍','Networking':'🌐'
+  46  };
+  47  
+  48  // ── RENDER ──
+  49  function renderGrid(){
+  50    const grid = document.getElementById('grid');
+  51    grid.innerHTML = '';
+  52    board.forEach((c, i) => {
+  53      const div = document.createElement('div');
+  54      div.className = 'card';
+  55      if(c.revealed) div.classList.add('revealed', 'team-' + c.team);
+  56      if(spyMode && !c.revealed) div.classList.add('spy-' + c.team);
+  57  
+  58      const pColor = periodColors[c.period] || '#64748b';
+  59      const icon = familyIcons[c.family] || '📦';
+  60  
+  61      div.innerHTML = `
+  62        <div class="tooltip">
+  63          <strong>${icon} ${c.name}</strong>
+  64          ${c.description}<br>
+  65          <span style="color:${pColor}">▸ ${c.period}</span>
+  66          ${c.depends ? '<br>↳ Dépend de: ' + c.depends : ''}
+  67        </div>
+  68        <div class="reveal-icon">${c.revealed ? (c.team==='blue'?'🔵':c.team==='red'?'🔴':c.team==='assassin'?'💀':'⚪') : ''}</div>
+  69        <div class="card-name">${c.name}</div>
+  70        <div class="card-family">${icon} ${c.family}</div>
+  71        <div class="card-period" style="color:${pColor}">${c.period}</div>
+  72      `;
+  73  
+  74      if(!c.revealed && !gameOver) div.onclick = () => revealCard(i);
+  75      grid.appendChild(div);
+  76    });
+  77  }
+  78  
+  79  function updateUI(){
+  80    document.getElementById('scoreBlue').textContent = `Bleu: ${blueLeft}`;
+  81    document.getElementById('scoreRed').textContent = `Rouge: ${redLeft}`;
+  82    const badge = document.getElementById('turnBadge');
+  83    badge.textContent = `Tour : ${turn === 'blue' ? 'Bleu' : 'Rouge'}`;
+  84    badge.className = 'turn-badge ' + turn;
+  85    renderGrid();
+  86  }
+  87  
+  88  function addLog(msg){
+  89    logs.push(msg);
+  90    if(logs.length > 12) logs.shift();
+  91    const bar = document.getElementById('logBar');
+  92    bar.innerHTML = logs.map(l => `<span class="log-entry">${l}</span>`).join('');
+  93    bar.scrollLeft = bar.scrollWidth;
+  94  }
+  95  
+  96  // ── GAME LOGIC ──
+  97  function revealCard(i){
+  98    if(board[i].revealed || gameOver) return;
+  99    if(!hintActive){addLog('⚠️ Donnez d\'abord un indice !');return;}
+ 100  
+ 101    board[i].revealed = true;
+ 102    const c = board[i];
+ 103  
+ 104    if(c.team === 'assassin'){
+ 105      addLog(`💀 ${c.name} — ASSASSIN ! ${turn === 'blue' ? 'Rouge' : 'Bleu'} gagne !`);
+ 106      gameOver = true;
+ 107      showWin(turn === 'blue' ? 'red' : 'blue', true);
+ 108      updateUI();
+ 109      return;
+ 110    }
+ 111  
+ 112    if(c.team === 'blue'){
+ 113      blueLeft--;
+ 114      addLog(`🔵 ${c.name} — Correct pour Bleu !`);
+ 115      if(blueLeft === 0){gameOver = true;showWin('blue');updateUI();return;}
+ 116      if(turn !== 'blue'){guessesLeft = 0;}
+ 117    } else if(c.team === 'red'){
+ 118      redLeft--;
+ 119      addLog(`🔴 ${c.name} — Correct pour Rouge !`);
+ 120      if(redLeft === 0){gameOver = true;showWin('red');updateUI();return;}
+ 121      if(turn !== 'red'){guessesLeft = 0;}
+ 122    } else {
+ 123      addLog(`⚪ ${c.name} — Neutre. Fin du tour.`);
+ 124      guessesLeft = 0;
+ 125    }
+ 126  
+ 127    if(c.team === turn){
+ 128      guessesLeft--;
+ 129      if(guessesLeft <= 0){
+ 130        addLog(`↩️ Plus de tentatives. Au tour de ${turn === 'blue' ? 'Rouge' : 'Bleu'}.`);
+ 131        switchTurn();
+ 132      }
+ 133    } else {
+ 134      switchTurn();
+ 135    }
+ 136  
+ 137    updateUI();
+ 138  }
+ 139  
+ 140  function switchTurn(){
+ 141    turn = turn === 'blue' ? 'red' : 'blue';
+ 142    hintActive = false;
+ 143    guessesLeft = 0;
+ 144    document.getElementById('hintDisplay').textContent = '';
+ 145  }
+ 146  
+ 147  function passTurn(){
+ 148    if(gameOver) return;
+ 149    addLog(`⏭️ ${turn === 'blue' ? 'Bleu' : 'Rouge'} passe son tour.`);
+ 150    switchTurn();
+ 151    updateUI();
+ 152  }
+ 153  
+ 154  function giveHint(){
+ 155    if(gameOver) return;
+ 156    const word = document.getElementById('hintWord').value.trim();
+ 157    const num = parseInt(document.getElementById('hintNum').value) || 0;
+ 158    if(!word){addLog('⚠️ Entrez un mot comme indice !');return;}
+ 159  
+ 160    hintActive = true;
+ 161    guessesLeft = num + 1; // Codenames rule: guess = number + 1
+ 162    document.getElementById('hintDisplay').textContent = `🔎 "${word.toUpperCase()}" → ${num}`;
+ 163    document.getElementById('hintWord').value = '';
+ 164    addLog(`💡 ${turn === 'blue' ? 'Bleu' : 'Rouge'} : "${word}" pour ${num} (${guessesLeft} tentatives)`);
+ 165  }
+ 166  
+ 167  function toggleSpy(){
+ 168    spyMode = document.getElementById('spyToggle').checked;
+ 169    renderGrid();
+ 170  }
+ 171  
+ 172  function showWin(winner, assassin = false){
+ 173    const modal = document.getElementById('modal');
+ 174    const title = document.getElementById('modalTitle');
+ 175    const msg = document.getElementById('modalMsg');
+ 176    title.innerHTML = `<span class="winner-${winner}">${winner === 'blue' ? '🔵 Bleu' : '🔴 Rouge'} gagne !</span>`;
+ 177    msg.textContent = assassin
+ 178      ? `L'équipe adverse a révélé l'Assassin !`
+ 179      : `Toutes les cartes de l'équipe ${winner === 'blue' ? 'Bleu' : 'Rouge'} ont été trouvées !`;
+ 180    modal.classList.add('show');
+ 181  }
+ 182  
+ 183  // ── INIT ──
+ 184  function initBoard(){
+ 185    const cards = pickCards();
+ 186    const types = assignTeams();
+ 187    board = cards.map((c, i) => ({...c, team: types[i], revealed: false}));
+ 188    turn = 'blue';
+ 189    blueLeft = 9;
+ 190    redLeft = 8;
+ 191    spyMode = false;
+ 192    hintActive = false;
+ 193    guessesLeft = 0;
+ 194    gameOver = false;
+ 195    logs = [];
+ 196    document.getElementById('spyToggle').checked = false;
+ 197    document.getElementById('hintDisplay').textContent = '';
+ 198    addLog('🎮 Nouvelle partie ! L\'équipe Bleu commence.');
+ 199    updateUI();
+ 200  }
+ 201  
+ 202  function startGame(){
+ 203    document.getElementById('splash').classList.add('hidden');
+ 204    initBoard();
+ 205  }
+ 206  
+ 207  function newGame(){
+ 208    document.getElementById('modal').classList.remove('show');
+ 209    initBoard();
+ 210  }
+ 211  
+ 212  // Pre-render empty grid
+ 213  initBoard();
+ 214  
