@@ -1,97 +1,97 @@
 Listes de mots du jeux :
-Wikipedia
-GitHub
-Linux
-Firefox
-Reddit
-Discord
-Contributeur
-Modérateur
-Bénévole
-Administrateur
-Novice
-Mentor
-Troll
-Spammeur
-Copyright
-Domaine public
-Partage
-Collaboration
-Consensus
-Vote
-Conflit
-Gouvernance
-Règles
-Charte
-Inclusion
-Exclusion
-Réputation
-Décentralisation
-Réseau
-Nœud
-Pair
-Protocole
-Partage
-Torrent
-Blockchain
-Anonymat
-Confiance
-Documentation
-Traduction
-Relecture
-Correction
-Amélioration
-Fusion
-Révision
-Qualité
-Validation
-Archivage
-YouTube
-Twitter/X
-Twitch
-Wikipédia
-Zoom
-WhatsApp
-Telegram
-Abonné
-Fondateur
-Créateur
-Lecteur
-Visiteur
-Expert
-Débutant
-Leader
-Like
-Partager
-Commenter
-Publier
-Signaler
-Bloquer
-Inviter
-Rejoindre
-Quitter
-Voter
-Gratuit
-Ouvert
-Fermé
-Public
-Privé
-Licence
-Accès
-Liberté
-Transparence
-Sécurité
-Mot de passe
-Identité
-Mise à jour
-Téléchargement
-Lien
-Serveur
-Profil
-Compte
-Message
-Forum
-Fil
+- Wikipedia
+- GitHub
+- Linux
+- Firefox
+- Reddit
+- Discord
+- Contributeur
+- Modérateur
+- Bénévole
+- Administrateur
+- Novice
+- Mentor
+- Troll
+- Spammeur
+- Copyright
+- Domaine public
+- Partage
+- Collaboration
+- Consensus
+- Vote
+- Conflit
+- Gouvernance
+- Règles
+- Charte
+- Inclusion
+- Exclusion
+- Réputation
+- Décentralisation
+- Réseau
+- Nœud
+- Pair
+- Protocole
+- Partage
+- Torrent
+- Blockchain
+- Anonymat
+- Confiance
+- Documentation
+- Traduction
+- Relecture
+- Correction
+- Amélioration
+- Fusion
+- Révision
+- Qualité
+- Validation
+- Archivage
+- YouTube
+- Twitter/X
+- Twitch
+- Wikipédia
+- Zoom
+- WhatsApp
+- Telegram
+- Abonné
+- Fondateur
+- Créateur
+- Lecteur
+- Visiteur
+- Expert
+- Débutant
+- Leader
+- Like
+- Partager
+- Commenter
+- Publier
+- Signaler
+- Bloquer
+- Inviter
+- Rejoindre
+- Quitter
+- Voter
+- Gratuit
+- Ouvert
+- Fermé
+- Public
+- Privé
+- Licence
+- Accès
+- Liberté
+- Transparence
+- Sécurité
+- Mot de passe
+- Identité
+- Mise à jour
+- Téléchargement
+- Lien
+- Serveur
+- Profil
+- Compte
+- Message
+- Forum
+
 Badge
 
 
