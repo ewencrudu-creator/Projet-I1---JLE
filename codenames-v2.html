@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CodeNoms — Communautés en ligne</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#07090f;--surface:#0f1520;--surface2:#151e2e;
+  --blue:#4f8ef7;--blue-dim:#172040;--blue-glow:rgba(79,142,247,.22);
+  --red:#f75f4f;--red-dim:#401717;--red-glow:rgba(247,95,79,.22);
+  --neutral:#64748b;--neutral-dim:#1e2535;
+  --assassin-border:#dc2626;
+  --text:#dde4f0;--text-dim:#7a8aaa;--text-dark:#3a4a66;
+  --gold:#f5c842;--green:#2dd4a0;--orange:#f97316;
+  --font-mono:'Space Mono',monospace;--font-sans:'Syne',sans-serif;
+}
+html,body{height:100%;font-family:var(--font-sans);background:var(--bg);color:var(--text);overflow-x:hidden}
+body{display:flex;flex-direction:column;min-height:100vh}
+
+/* ── SPLASH ── */
+.splash{position:fixed;inset:0;z-index:1000;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:20px;transition:opacity .6s,visibility .6s;padding:20px;overflow-y:auto}
+.splash.hidden{opacity:0;visibility:hidden;pointer-events:none}
+.splash-title{font-size:clamp(2.5rem,7vw,5rem);font-weight:800;letter-spacing:-3px;line-height:1;text-align:center}
+.splash-title .t1{color:var(--blue)}.splash-title .t2{color:var(--text)}.splash-title .t3{color:var(--red)}
+.splash-sub{color:var(--text-dim);font-size:.98rem;max-width:500px;text-align:center;line-height:1.7}
+.rules-box{text-align:left;background:var(--surface);border:1px solid rgba(255,255,255,.07);border-radius:16px;padding:20px 24px;max-width:580px;width:100%;font-size:.86rem;line-height:1.85;color:var(--text-dim)}
+.rules-box strong{color:var(--text)}
+.rules-box h3{color:var(--text);font-size:.95rem;margin-bottom:8px;font-weight:800}
+.rules-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
+.rule-item{background:var(--surface2);border-radius:10px;padding:10px 12px;font-size:.8rem;border:1px solid rgba(255,255,255,.05)}
+.rule-item .ri-title{color:var(--text);font-weight:700;margin-bottom:3px;font-size:.82rem}
+.dot{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:5px;vertical-align:-1px}
+.dot.b{background:var(--blue)}.dot.r{background:var(--red)}.dot.n{background:var(--neutral)}.dot.a{background:#300;border:2px solid var(--assassin-border)}
+.new-badge{display:inline-block;background:var(--orange);color:#fff;font-size:.65rem;font-weight:800;padding:1px 6px;border-radius:4px;margin-left:5px;vertical-align:1px;letter-spacing:.3px}
+.btn{font-family:var(--font-sans);font-weight:700;font-size:.92rem;border:none;border-radius:10px;padding:12px 30px;cursor:pointer;transition:all .2s;letter-spacing:.3px}
+.btn-start{background:linear-gradient(135deg,var(--blue),#7c6ef7);color:#fff;box-shadow:0 4px 24px rgba(79,142,247,.3)}
+.btn-start:hover{transform:translateY(-2px);box-shadow:0 8px 32px rgba(79,142,247,.45)}
+.btn-sm{padding:7px 15px;font-size:.78rem;border-radius:8px}
+.btn-outline{background:transparent;border:1.5px solid rgba(255,255,255,.12);color:var(--text-dim)}
+.btn-outline:hover{border-color:var(--blue);color:var(--blue)}
+.btn-danger{background:linear-gradient(135deg,#dc2626,#991111);color:#fff}
+
+/* ── TOP BAR ── */
+.topbar{display:flex;align-items:center;justify-content:space-between;padding:9px 16px;background:var(--surface);border-bottom:1px solid rgba(255,255,255,.05);flex-wrap:wrap;gap:6px}
+.logo{font-family:var(--font-mono);font-weight:700;font-size:.95rem;letter-spacing:-1px;white-space:nowrap}
+.logo .l1{color:var(--blue)}.logo .l2{color:var(--text)}.logo .l3{color:var(--red)}
+.score-area{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.score-pill{display:flex;align-items:center;gap:5px;padding:4px 12px;border-radius:20px;font-weight:700;font-size:.85rem}
+.score-pill.blue{background:var(--blue-dim);color:var(--blue)}.score-pill.red{background:var(--red-dim);color:var(--red)}
+.turn-badge{padding:4px 12px;border-radius:20px;font-weight:700;font-size:.78rem;animation:pulse 2s infinite}
+.turn-badge.blue{background:var(--blue-dim);color:var(--blue);border:1px solid var(--blue)}
+.turn-badge.red{background:var(--red-dim);color:var(--red);border:1px solid var(--red)}
+.turn-badge.danger{background:rgba(220,38,38,.2);color:#ef4444;border:1px solid #ef4444;animation:pulseDanger 1s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.6}}
+@keyframes pulseDanger{0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(220,38,38,.4)}50%{opacity:.8;box-shadow:0 0 0 6px rgba(220,38,38,0)}}
+
+/* ── ARCHITECT BAR ── */
+.arch-bar{display:flex;align-items:center;justify-content:center;gap:10px;padding:8px 16px;background:rgba(245,200,66,.04);border-bottom:1px solid rgba(245,200,66,.1)}
+.arch-bar label{font-size:.8rem;color:var(--gold);font-weight:700;letter-spacing:.3px}
+.arch-bar .role-label{font-size:.75rem;color:var(--text-dim);font-family:var(--font-mono)}
+.toggle{position:relative;width:42px;height:23px;cursor:pointer}
+.toggle input{display:none}
+.toggle .slider{position:absolute;inset:0;background:var(--neutral-dim);border-radius:12px;transition:.3s}
+.toggle .slider::before{content:'';position:absolute;width:17px;height:17px;left:3px;top:3px;background:var(--text-dim);border-radius:50%;transition:.3s}
+.toggle input:checked+.slider{background:var(--gold)}
+.toggle input:checked+.slider::before{transform:translateX(19px);background:#fff}
+
+/* ── HINT AREA ── */
+.hint-area{display:flex;align-items:center;justify-content:center;gap:10px;padding:8px 16px;background:var(--surface2);border-bottom:1px solid rgba(255,255,255,.04);flex-wrap:wrap}
+.hint-area input{font-family:var(--font-mono);background:var(--surface);border:1.5px solid rgba(255,255,255,.09);color:var(--text);padding:6px 12px;border-radius:8px;font-size:.86rem;width:160px;text-align:center}
+.hint-area input::placeholder{color:var(--text-dark)}
+.hint-area input[type=number]{width:54px}
+.hint-display{font-family:var(--font-mono);font-size:.95rem;font-weight:700;color:var(--gold);letter-spacing:1px}
+
+/* ── SURVIVAL BANNER ── */
+.survival-banner{display:none;align-items:center;justify-content:center;gap:10px;padding:10px 16px;background:linear-gradient(135deg,rgba(220,38,38,.15),rgba(220,38,38,.08));border-bottom:2px solid var(--assassin-border);animation:pulseBanner 1.2s infinite}
+.survival-banner.active{display:flex}
+@keyframes pulseBanner{0%,100%{background:linear-gradient(135deg,rgba(220,38,38,.15),rgba(220,38,38,.08))}50%{background:linear-gradient(135deg,rgba(220,38,38,.25),rgba(220,38,38,.15))}}
+.survival-banner span{font-size:.88rem;font-weight:700;color:#ef4444;letter-spacing:.3px}
+.rescue-word{font-family:var(--font-mono);font-size:.95rem;color:#fbbf24;background:rgba(251,191,36,.12);padding:3px 10px;border-radius:6px;border:1px solid rgba(251,191,36,.3)}
+
+/* ── GRID ── */
+.grid-wrap{flex:1;display:flex;align-items:center;justify-content:center;padding:12px}
+.grid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;max-width:960px;width:100%}
+
+/* ── CARD ── */
+.card{
+  position:relative;border-radius:11px;cursor:pointer;
+  display:flex;flex-direction:column;
+  border:2px solid rgba(255,255,255,.07);
+  background:var(--surface2);
+  transition:all .22s;overflow:hidden;user-select:none;
+  aspect-ratio:.72; /* portrait like a real card */
+}
+.card:hover:not(.revealed):not(.rescue-candidate){transform:translateY(-3px);border-color:rgba(255,255,255,.18);box-shadow:0 8px 22px rgba(0,0,0,.35)}
+
+/* Image zone - white square placeholder */
+.card-img{
+  width:100%;flex:1;
+  background:#ffffff;
+  display:flex;align-items:center;justify-content:center;
+  position:relative;overflow:hidden;
+  min-height:0;
+}
+.card-img .img-placeholder{
+  width:100%;height:100%;
+  background:#fff;
+  position:relative;
+}
+/* Grid lines on the placeholder to show it's empty */
+.card-img .img-placeholder::after{
+  content:'';
+  position:absolute;inset:0;
+  background-image:
+    linear-gradient(rgba(0,0,0,.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,0,0,.04) 1px, transparent 1px);
+  background-size:12px 12px;
+}
+.card-img .cat-icon{
+  position:absolute;bottom:4px;right:5px;
+  font-size:.75rem;opacity:.25;z-index:1;
+}
+
+/* Text zone */
+.card-text{
+  padding:5px 5px 4px;
+  background:var(--surface2);
+  text-align:center;
+  flex-shrink:0;
+}
+.card-name{font-weight:800;font-size:clamp(.52rem,1.15vw,.78rem);line-height:1.15;color:var(--text);word-break:break-word}
+.card-cat-label{font-size:.5rem;color:var(--text-dark);margin-top:2px;font-weight:700;text-transform:uppercase;letter-spacing:.4px}
+
+/* SPY MODE */
+.card.spy-blue .card-text{background:var(--blue-dim)}
+.card.spy-blue{border-color:var(--blue);box-shadow:0 0 12px var(--blue-glow)}
+.card.spy-blue .card-name{color:var(--blue)}
+.card.spy-blue::after{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--blue);z-index:2}
+.card.spy-red .card-text{background:var(--red-dim)}
+.card.spy-red{border-color:var(--red);box-shadow:0 0 12px var(--red-glow)}
+.card.spy-red .card-name{color:var(--red)}
+.card.spy-red::after{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--red);z-index:2}
+.card.spy-neutral{opacity:.6}
+.card.spy-assassin{border-color:var(--assassin-border)}
+.card.spy-assassin .card-img{background:#1a0000}
+.card.spy-assassin .card-img .img-placeholder{background:#1a0000}
+.card.spy-assassin::after{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:#dc2626;z-index:2}
+
+/* REVEALED */
+.card.revealed{cursor:default;transform:none!important}
+.card.revealed.team-blue{border-color:var(--blue)}
+.card.revealed.team-blue .card-img{background:linear-gradient(160deg,#c8deff,#ddeeff)}
+.card.revealed.team-blue .card-text{background:var(--blue-dim)}
+.card.revealed.team-blue .card-name{color:var(--blue)}
+.card.revealed.team-red{border-color:var(--red)}
+.card.revealed.team-red .card-img{background:linear-gradient(160deg,#ffd5cf,#ffe8e5)}
+.card.revealed.team-red .card-text{background:var(--red-dim)}
+.card.revealed.team-red .card-name{color:var(--red)}
+.card.revealed.team-neutral{opacity:.4;border-color:var(--neutral)}
+.card.revealed.team-neutral .card-img{background:#c8c8c8}
+.card.revealed.team-neutral .card-text{background:var(--neutral-dim)}
+.card.revealed.team-neutral .card-name{color:var(--neutral)}
+.card.revealed.team-assassin{border-color:var(--assassin-border)}
+.card.revealed.team-assassin .card-img{background:linear-gradient(160deg,#2d0000,#1a0000)}
+.card.revealed.team-assassin .card-text{background:#1a0000}
+.card.revealed.team-assassin .card-name{color:#ef4444;text-decoration:line-through}
+.card.revealed.team-assassin2{border-color:var(--assassin-border)}
+.card.revealed.team-assassin2 .card-img{background:linear-gradient(160deg,#2d0000,#1a0000)}
+.card.revealed.team-assassin2 .card-text{background:#1a0000}
+.card.revealed.team-assassin2 .card-name{color:#ef4444;text-decoration:line-through}
+
+/* RESCUE CANDIDATE */
+.card.rescue-candidate{
+  border-color:#fbbf24!important;
+  box-shadow:0 0 18px rgba(251,191,36,.5)!important;
+  animation:rescuePulse 1s infinite;
+  cursor:pointer!important;
+}
+@keyframes rescuePulse{
+  0%,100%{box-shadow:0 0 18px rgba(251,191,36,.4)}
+  50%{box-shadow:0 0 28px rgba(251,191,36,.8)}
+}
+
+.card .reveal-icon{position:absolute;top:4px;right:6px;font-size:.7rem;z-index:3;opacity:0;transition:opacity .3s}
+.card.revealed .reveal-icon{opacity:1}
+
+/* TOOLTIP */
+.card .tooltip{
+  position:absolute;bottom:105%;left:50%;transform:translateX(-50%);
+  background:#1a2540;border:1px solid rgba(255,255,255,.1);
+  border-radius:10px;padding:9px 13px;width:190px;
+  font-size:.72rem;line-height:1.5;color:var(--text-dim);
+  pointer-events:none;opacity:0;transition:opacity .2s;z-index:50;
+  box-shadow:0 8px 22px rgba(0,0,0,.5)
+}
+.card:hover .tooltip{opacity:1}
+.tooltip strong{color:var(--text);display:block;margin-bottom:2px}
+
+/* MODAL */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.78);z-index:500;display:flex;align-items:center;justify-content:center;opacity:0;visibility:hidden;transition:all .3s}
+.modal-overlay.show{opacity:1;visibility:visible}
+.modal{background:var(--surface);border:1px solid rgba(255,255,255,.08);border-radius:18px;padding:32px;text-align:center;max-width:420px;width:90%}
+.modal h2{font-size:1.65rem;margin-bottom:8px}
+.modal p{color:var(--text-dim);margin-bottom:20px;line-height:1.6;font-size:.9rem}
+.winner-blue{color:var(--blue)}.winner-red{color:var(--red)}
+
+/* LOG */
+.log-bar{padding:6px 16px;background:var(--surface);border-top:1px solid rgba(255,255,255,.05);font-size:.73rem;color:var(--text-dark);font-family:var(--font-mono);overflow-x:auto;white-space:nowrap;display:flex;gap:12px}
+.log-entry{opacity:.6}.log-entry:last-child{opacity:1;color:var(--text-dim)}
+
+/* ROLE LABELS */
+.role-chips{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-top:4px}
+.role-chip{display:flex;align-items:center;gap:5px;padding:3px 10px;border-radius:20px;font-size:.72rem;font-weight:700}
+.role-chip.architect{background:rgba(245,200,66,.12);color:var(--gold);border:1px solid rgba(245,200,66,.2)}
+.role-chip.member{background:rgba(79,142,247,.1);color:var(--blue);border:1px solid rgba(79,142,247,.2)}
+
+@media(max-width:680px){
+  .grid{gap:4px}
+  .card{aspect-ratio:.65}
+  .card-name{font-size:.48rem}
+  .card-cat-label{display:none}
+  .card .tooltip{display:none}
+  .hint-area{gap:6px}
+  .card-img .cat-icon{display:none}
+}
+</style>
+</head>
+<body>
+
+<!-- SPLASH -->
+<div class="splash" id="splash">
+  <div class="splash-title"><span class="t1">Code</span><span class="t2">Noms</span></div>
+  <p class="splash-sub">Jeu <strong>Codenames</strong> sur les <strong>communautés en ligne</strong> et la <strong>production pair-à-pair</strong></p>
+
+  <div class="rules-box">
+    <h3>🎴 Règles du jeu</h3>
+    Deux équipes : <span class="dot b"></span><strong>Bleu</strong> et <span class="dot r"></span><strong>Rouge</strong>.<br>
+    Chaque équipe désigne un <strong>🏗️ Architecte</strong> qui voit la grille secrète.<br>
+    L'Architecte donne un <strong>indice</strong> (1 mot + 1 chiffre). Les <strong>🔍 Explorateurs</strong> devinent.<br><br>
+
+    <div class="rules-grid">
+      <div class="rule-item"><div class="ri-title"><span class="dot b"></span> 9 cartes Bleu</div>À trouver en premier pour gagner</div>
+      <div class="rule-item"><div class="ri-title"><span class="dot r"></span> 8 cartes Rouge</div>L'adversaire doit les trouver</div>
+      <div class="rule-item"><div class="ri-title"><span class="dot n"></span> 6 Neutres</div>Fin du tour si révélée</div>
+      <div class="rule-item"><div class="ri-title"><span class="dot a"></span> 2 Pièges <span class="new-badge">NOUVEAU</span></div>Danger ! Mais une <strong>seconde chance</strong> possible</div>
+    </div>
+    <br>
+    <strong>🛡️ Seconde chance :</strong> Révéler un Piège n'est plus automatiquement fatal ! L'Architecte connaît le <strong>mot de survie</strong> — les Explorateurs doivent le trouver en 1 essai. Échouez, et c'est la défaite.
+  </div>
+
+  <div class="role-chips">
+    <div class="role-chip architect">🏗️ Architecte — voit la grille secrète</div>
+    <div class="role-chip member">🔍 Explorateur — devine les mots</div>
+  </div>
+
+  <button class="btn btn-start" onclick="startGame()">🚀 Commencer la partie</button>
+</div>
+
+<!-- TOPBAR -->
+<div class="topbar">
+  <div class="logo"><span class="l1">&lt;</span><span class="l2">CodeNoms</span><span class="l3">/&gt;</span></div>
+  <div class="score-area">
+    <div class="score-pill blue" id="scoreBlue">🔵 Bleu : 9</div>
+    <div class="turn-badge blue" id="turnBadge">Tour : Bleu</div>
+    <div class="score-pill red" id="scoreRed">🔴 Rouge : 8</div>
+  </div>
+  <div style="display:flex;gap:6px">
+    <button class="btn btn-sm btn-outline" onclick="passTurn()">Passer</button>
+    <button class="btn btn-sm btn-outline" onclick="newGame()">Nouvelle partie</button>
+  </div>
+</div>
+
+<!-- ARCHITECT BAR -->
+<div class="arch-bar">
+  <span class="role-label">🔍 Explorateurs</span>
+  <span style="color:var(--text-dark);font-size:.75rem">·</span>
+  <label style="color:var(--gold);font-size:.8rem;font-weight:700">🏗️ Mode Architecte</label>
+  <label class="toggle"><input type="checkbox" id="spyToggle" onchange="toggleSpy()"><span class="slider"></span></label>
+</div>
+
+<!-- HINT AREA -->
+<div class="hint-area" id="hintArea">
+  <input type="text" id="hintWord" placeholder="Votre indice…">
+  <input type="number" id="hintNum" min="0" max="9" value="2">
+  <button class="btn btn-sm btn-start" onclick="giveHint()">Donner l'indice</button>
+  <div class="hint-display" id="hintDisplay"></div>
+</div>
+
+<!-- SURVIVAL BANNER -->
+<div class="survival-banner" id="survivalBanner">
+  <span>⚠️ PIÈGE ! Trouvez le mot de survie en 1 essai !</span>
+  <!-- Mot visible UNIQUEMENT par l'Architecte (mode spy) -->
+  <span class="rescue-word architect-only" id="rescueWordDisplay" style="display:none">—</span>
+  <span class="architect-only" id="rescueHint" style="display:none;color:var(--text-dim);font-size:.8rem">← mot à faire deviner</span>
+</div>
+
+<!-- GRID -->
+<div class="grid-wrap">
+  <div class="grid" id="grid"></div>
+</div>
+
+<!-- LOG -->
+<div class="log-bar" id="logBar"><span class="log-entry">Partie prête…</span></div>
+
+<!-- WIN MODAL -->
+<div class="modal-overlay" id="modal">
+  <div class="modal">
+    <h2 id="modalTitle">Victoire !</h2>
+    <p id="modalMsg"></p>
+    <button class="btn btn-start" onclick="newGame();document.getElementById('modal').classList.remove('show')">🔄 Rejouer</button>
+  </div>
+</div>
+
+<script>
+// ── DATA FROM CSV ──
+const ALL_CARDS = [
+  {name:"Wikipedia",     cat:"Plateformes", desc:"Encyclopédie collaborative mondiale."},
+  {name:"GitHub",        cat:"Plateformes", desc:"Hébergement de code et collaboration."},
+  {name:"Linux",         cat:"Logiciels",   desc:"Système d'exploitation libre et ouvert."},
+  {name:"Firefox",       cat:"Logiciels",   desc:"Navigateur web respectueux de la vie privée."},
+  {name:"Reddit",        cat:"Plateformes", desc:"Réseau social basé sur des subreddits."},
+  {name:"Discord",       cat:"Plateformes", desc:"Outil de communication par serveurs thématiques."},
+  {name:"Contributeur",  cat:"Rôles",       desc:"Personne qui apporte du contenu ou du code."},
+  {name:"Modérateur",    cat:"Rôles",       desc:"Garant du respect des règles de la communauté."},
+  {name:"Bénévole",      cat:"Rôles",       desc:"Acteur non rémunéré agissant pour le bien commun."},
+  {name:"Administrateur",cat:"Rôles",       desc:"Gestionnaire des droits et de l'infrastructure."},
+  {name:"Novice",        cat:"Rôles",       desc:"Nouvel arrivant dans une communauté (Newbie)."},
+  {name:"Mentor",        cat:"Rôles",       desc:"Membre expérimenté qui guide les débutants."},
+  {name:"Troll",         cat:"Risques",     desc:"Individu cherchant à générer des conflits."},
+  {name:"Spammeur",      cat:"Risques",     desc:"Envoyeur de messages indésirables en masse."},
+  {name:"Copyright",     cat:"Droit",       desc:"Droit d'auteur classique (opposé au Copyleft)."},
+  {name:"Domaine public",cat:"Droit",       desc:"Contenu libre de tout droit d'auteur."},
+  {name:"Partage",       cat:"Valeurs",     desc:"Action de mettre en commun une ressource."},
+  {name:"Collaboration", cat:"Valeurs",     desc:"Travail en commun pour un objectif partagé."},
+  {name:"Consensus",     cat:"Gouvernance", desc:"Accord général au sein d'un groupe."},
+  {name:"Vote",          cat:"Gouvernance", desc:"Outil de prise de décision collective."},
+  {name:"Conflit",       cat:"Gouvernance", desc:"Désaccord à résoudre au sein du groupe."},
+  {name:"Gouvernance",   cat:"Gouvernance", desc:"Ensemble des règles de gestion d'un projet."},
+  {name:"Règles",        cat:"Gouvernance", desc:"Cadre à respecter pour le bon fonctionnement."},
+  {name:"Charte",        cat:"Gouvernance", desc:"Texte définissant les valeurs de la communauté."},
+  {name:"Inclusion",     cat:"Éthique",     desc:"Action de s'ouvrir à tous les profils."},
+  {name:"Exclusion",     cat:"Éthique",     desc:"Action de bannir un membre suite à une faute."},
+  {name:"Réputation",    cat:"Social",      desc:"Score de confiance accordé par les pairs."},
+  {name:"Décentralisation",cat:"Concept",  desc:"Répartition du pouvoir sans autorité centrale."},
+  {name:"Réseau",        cat:"Technique",   desc:"Ensemble de nœuds connectés entre eux."},
+  {name:"Nœud",          cat:"Technique",   desc:"Point de connexion dans un réseau."},
+  {name:"Pair",          cat:"Technique",   desc:"Membre ayant les mêmes droits (P2P)."},
+  {name:"Protocole",     cat:"Technique",   desc:"Règles permettant à deux machines de communiquer."},
+  {name:"Torrent",       cat:"Technique",   desc:"Protocole de partage de fichiers décentralisé."},
+  {name:"Blockchain",    cat:"Technique",   desc:"Registre numérique sécurisé et partagé."},
+  {name:"Anonymat",      cat:"Éthique",     desc:"Possibilité d'agir sans révéler son identité."},
+  {name:"Confiance",     cat:"Social",      desc:"Base de l'économie collaborative entre inconnus."},
+  {name:"Documentation", cat:"Travail",     desc:"Trace écrite expliquant le fonctionnement."},
+  {name:"Traduction",    cat:"Travail",     desc:"Adaptation du contenu en d'autres langues."},
+  {name:"Relecture",     cat:"Travail",     desc:"Vérification du travail d'un autre membre."},
+  {name:"Correction",    cat:"Travail",     desc:"Action de réparer une erreur ou un bug."},
+  {name:"Amélioration",  cat:"Travail",     desc:"Optimisation d'un contenu existant."},
+  {name:"Fusion",        cat:"Technique",   desc:"Action de réunir deux versions d'un travail (Merge)."},
+  {name:"Révision",      cat:"Travail",     desc:"Modification d'un contenu pour le mettre à jour."},
+  {name:"Qualité",       cat:"Valeurs",     desc:"Niveau d'exigence d'un projet collaboratif."},
+  {name:"Validation",    cat:"Travail",     desc:"Approbation finale avant publication."},
+  {name:"Archivage",     cat:"Travail",     desc:"Conservation d'anciennes versions pour l'historique."},
+  {name:"YouTube",       cat:"Plateformes", desc:"Hébergement de vidéos avec monétisation."},
+  {name:"Twitter/X",     cat:"Plateformes", desc:"Réseau social de micro-blogging."},
+  {name:"Twitch",        cat:"Plateformes", desc:"Plateforme de streaming en direct."},
+  {name:"Zoom",          cat:"Plateformes", desc:"Logiciel de visioconférence."},
+  {name:"WhatsApp",      cat:"Plateformes", desc:"Messagerie instantanée grand public."},
+  {name:"Telegram",      cat:"Plateformes", desc:"Messagerie sécurisée avec canaux et bots."},
+  {name:"Abonné",        cat:"Rôles",       desc:"Utilisateur qui suit un créateur ou une page."},
+  {name:"Fondateur",     cat:"Rôles",       desc:"Créateur original du projet ou de la plateforme."},
+  {name:"Créateur",      cat:"Rôles",       desc:"Personne produisant du contenu original."},
+  {name:"Lecteur",       cat:"Rôles",       desc:"Consommateur passif de contenu."},
+  {name:"Visiteur",      cat:"Rôles",       desc:"Utilisateur de passage non inscrit."},
+  {name:"Expert",        cat:"Rôles",       desc:"Personne possédant des compétences pointues."},
+  {name:"Débutant",      cat:"Rôles",       desc:"Personne en phase d'apprentissage."},
+  {name:"Leader",        cat:"Rôles",       desc:"Personne qui impulse une direction au projet."},
+  {name:"Like",          cat:"Actions",     desc:"Action d'approuver un contenu."},
+  {name:"Partager",      cat:"Actions",     desc:"Action de diffuser un contenu à son réseau."},
+  {name:"Commenter",     cat:"Actions",     desc:"Action d'écrire un avis sous un contenu."},
+  {name:"Publier",       cat:"Actions",     desc:"Action de rendre un contenu visible de tous."},
+  {name:"Signaler",      cat:"Actions",     desc:"Action de rapporter un contenu inapproprié."},
+  {name:"Bloquer",       cat:"Actions",     desc:"Action d'empêcher un utilisateur d'interagir."},
+  {name:"Inviter",       cat:"Actions",     desc:"Action de proposer à quelqu'un de rejoindre."},
+  {name:"Rejoindre",     cat:"Actions",     desc:"Action d'entrer dans une communauté."},
+  {name:"Quitter",       cat:"Actions",     desc:"Action de sortir d'un groupe ou d'une plateforme."},
+  {name:"Gratuit",       cat:"Économie",    desc:"Modèle sans échange monétaire direct."},
+  {name:"Ouvert",        cat:"Économie",    desc:"Projet dont les sources ou l'accès sont libres."},
+  {name:"Fermé",         cat:"Économie",    desc:"Système propriétaire avec accès restreint."},
+  {name:"Public",        cat:"Économie",    desc:"Accessible à n'importe quel internaute."},
+  {name:"Privé",         cat:"Économie",    desc:"Réservé à un groupe restreint ou à soi-même."},
+  {name:"Licence",       cat:"Droit",       desc:"Contrat fixant les conditions d'utilisation."},
+  {name:"Accès",         cat:"Droit",       desc:"Possibilité d'utiliser une ressource."},
+  {name:"Liberté",       cat:"Valeurs",     desc:"Droit de copier, modifier et distribuer."},
+  {name:"Transparence",  cat:"Valeurs",     desc:"Visibilité des décisions et des comptes."},
+  {name:"Sécurité",      cat:"Technique",   desc:"Protection des données et des utilisateurs."},
+  {name:"Mot de passe",  cat:"Technique",   desc:"Clé d'accès personnelle à un compte."},
+  {name:"Identité",      cat:"Social",      desc:"Profil numérique d'un utilisateur."},
+  {name:"Mise à jour",   cat:"Technique",   desc:"Nouvelle version apportant des corrections."},
+  {name:"Téléchargement",cat:"Technique",   desc:"Action de récupérer un fichier sur son appareil."},
+  {name:"Lien",          cat:"Technique",   desc:"Point de passage d'une page à une autre."},
+  {name:"Serveur",       cat:"Technique",   desc:"Ordinateur qui stocke et distribue les données."},
+  {name:"Profil",        cat:"Social",      desc:"Page regroupant les informations d'un membre."},
+  {name:"Compte",        cat:"Social",      desc:"Espace personnel sécurisé sur une plateforme."},
+  {name:"Message",       cat:"Actions",     desc:"Unité de base de la communication."},
+  {name:"Forum",         cat:"Plateformes", desc:"Espace de discussion asynchrone par thèmes."},
+  {name:"Badge",         cat:"Social",      desc:"Récompense visuelle soulignant un accomplissement."}
+];
+
+const catColors = {
+  "Plateformes":"#4f8ef7","Rôles":"#a78bfa","Logiciels":"#38bdf8",
+  "Droit":"#f59e0b","Valeurs":"#2dd4a0","Gouvernance":"#ec4899",
+  "Éthique":"#fb923c","Concept":"#818cf8","Technique":"#64748b",
+  "Travail":"#34d399","Actions":"#f472b6","Risques":"#ef4444",
+  "Social":"#c084fc","Économie":"#84cc16"
+};
+const catIcons = {
+  "Plateformes":"🌐","Rôles":"👤","Logiciels":"💻","Droit":"⚖️",
+  "Valeurs":"🤝","Gouvernance":"🏛️","Éthique":"⚡","Concept":"💡",
+  "Technique":"⚙️","Travail":"✏️","Actions":"✨","Risques":"⚠️",
+  "Social":"👥","Économie":"💰"
+};
+
+// ── STATE ──
+let board=[], turn='blue', blueLeft=9, redLeft=8;
+let spyMode=false, guessesLeft=0, hintActive=false, gameOver=false, logs=[];
+// Second chance state
+let survivalMode=false, rescueCardIndex=-1, survivingTeam='';
+
+function shuffle(a){
+  for(let i=a.length-1;i>0;i--){
+    const j=Math.floor(Math.random()*(i+1));
+    [a[i],a[j]]=[a[j],a[i]];
+  }
+  return a;
+}
+
+function initBoard(){
+  const cards=shuffle([...ALL_CARDS]).slice(0,25);
+  // 9 blue, 8 red, 5 neutral, 2 assassin = 24... wait 9+8+5+2=24 not 25
+  // 9 blue, 8 red, 6 neutral, 2 assassin = 25 ✓
+  const t=[];
+  for(let i=0;i<9;i++) t.push('blue');
+  for(let i=0;i<8;i++) t.push('red');
+  for(let i=0;i<6;i++) t.push('neutral');
+  t.push('assassin');
+  t.push('assassin2');
+  shuffle(t);
+  board=cards.map((c,i)=>({...c,team:t[i],revealed:false}));
+  turn='blue';blueLeft=9;redLeft=8;
+  spyMode=false;hintActive=false;guessesLeft=0;gameOver=false;logs=[];
+  survivalMode=false;rescueCardIndex=-1;survivingTeam='';
+  document.getElementById('spyToggle').checked=false;
+  document.getElementById('hintDisplay').textContent='';
+  document.getElementById('survivalBanner').classList.remove('active');
+  addLog('🎮 Nouvelle partie — Équipe Bleu commence. Bonne chance !');
+  updateUI();
+}
+
+function renderGrid(){
+  const grid=document.getElementById('grid');
+  grid.innerHTML='';
+  board.forEach((c,i)=>{
+    const div=document.createElement('div');
+    div.className='card';
+    if(c.revealed) div.classList.add('revealed','team-'+c.team);
+    if(spyMode&&!c.revealed){
+      const spyClass=c.team==='assassin'||c.team==='assassin2'?'spy-assassin':'spy-'+c.team;
+      div.classList.add(spyClass);
+    }
+    // Rescue card highlight UNIQUEMENT pour l'Architecte
+    if(survivalMode && spyMode && i===rescueCardIndex && !c.revealed){
+      div.classList.add('rescue-candidate');
+    }
+    const col=catColors[c.cat]||'#64748b';
+    const icon=catIcons[c.cat]||'📦';
+    // Determine reveal icon
+    let revealIcon='';
+    if(c.revealed){
+      if(c.team==='blue') revealIcon='🔵';
+      else if(c.team==='red') revealIcon='🔴';
+      else if(c.team==='assassin'||c.team==='assassin2') revealIcon='💀';
+      else revealIcon='⚪';
+    }
+    // En mode Architecte, afficher "PIÈGE" sur les cartes pièges non révélées
+    const isPiege = (c.team==='assassin'||c.team==='assassin2') && !c.revealed && spyMode;
+    div.innerHTML=`
+      <div class="tooltip"><strong>${icon} ${c.name}</strong>${c.desc}<br><span style="color:${col}">▸ ${c.cat}</span></div>
+      <div class="reveal-icon">${revealIcon}</div>
+      <div class="card-img">
+        <div class="img-placeholder"></div>
+        <div class="cat-icon">${icon}</div>
+      </div>
+      <div class="card-text">
+        <div class="card-name">${c.name}</div>
+        <div class="card-cat-label" style="color:${isPiege?'#ef4444':col}">${isPiege?'⚠️ PIÈGE':c.cat}</div>
+      </div>`;
+    if(!c.revealed&&!gameOver) div.onclick=()=>clickCard(i);
+    grid.appendChild(div);
+  });
+}
+
+function updateUI(){
+  document.getElementById('scoreBlue').textContent=`🔵 Bleu : ${blueLeft}`;
+  document.getElementById('scoreRed').textContent=`🔴 Rouge : ${redLeft}`;
+  const badge=document.getElementById('turnBadge');
+  if(survivalMode){
+    badge.textContent=`⚠️ SURVIE — ${turn==='blue'?'Bleu':'Rouge'}`;
+    badge.className='turn-badge danger';
+  } else {
+    badge.textContent=`Tour : ${turn==='blue'?'Bleu':'Rouge'}`;
+    badge.className='turn-badge '+turn;
+  }
+  renderGrid();
+}
+
+function addLog(msg){
+  logs.push(msg);
+  if(logs.length>12) logs.shift();
+  const bar=document.getElementById('logBar');
+  bar.innerHTML=logs.map(l=>`<span class="log-entry">${l}</span>`).join('');
+  bar.scrollLeft=bar.scrollWidth;
+}
+
+// ── SURVIVAL MODE ──
+function enterSurvivalMode(hitTeam){
+  survivalMode=true;
+  survivingTeam=hitTeam;
+  hintActive=true;
+  guessesLeft=1;
+  const candidates=board
+    .map((c,i)=>({c,i}))
+    .filter(({c,i})=>!c.revealed && c.team!=='assassin' && c.team!=='assassin2' && i!==rescueCardIndex);
+  const pick=candidates[Math.floor(Math.random()*candidates.length)];
+  rescueCardIndex=pick.i;
+  const rescueName=board[pick.i].name;
+  // Stocker le mot mais NE PAS l'afficher dans les logs (visible de tous)
+  document.getElementById('rescueWordDisplay').textContent=rescueName;
+  document.getElementById('survivalBanner').classList.add('active');
+  // Afficher le mot seulement si l'Architecte a son mode activé
+  updateRescueVisibility();
+  addLog(`⚠️ PIÈGE touché ! L'Architecte connaît le mot de survie — 1 essai !`);
+  updateUI();
+}
+
+function exitSurvivalMode(){
+  survivalMode=false;
+  rescueCardIndex=-1;
+  survivingTeam='';
+  document.getElementById('survivalBanner').classList.remove('active');
+  document.getElementById('rescueWordDisplay').textContent='—';
+  document.getElementById('rescueWordDisplay').style.display='none';
+  document.getElementById('rescueHint').style.display='none';
+}
+
+function updateRescueVisibility(){
+  // Le mot de survie n'est visible que par l'Architecte (mode spy activé)
+  const show = spyMode && survivalMode;
+  document.getElementById('rescueWordDisplay').style.display = show ? 'inline' : 'none';
+  document.getElementById('rescueHint').style.display = show ? 'inline' : 'none';
+}
+
+// ── CLICK CARD ──
+function clickCard(i){
+  if(board[i].revealed||gameOver) return;
+
+  if(survivalMode){
+    // Only allow clicking the rescue card or fail
+    if(i===rescueCardIndex){
+      // SURVIVED !
+      board[i].revealed=true;
+      addLog(`🛡️ SURVIE ! "${board[i].name}" trouvé — l'équipe ${turn==='blue'?'Bleue':'Rouge'} continue !`);
+      exitSurvivalMode();
+      hintActive=false;
+      guessesLeft=0;
+      switchTurn();
+      updateUI();
+    } else {
+      // WRONG — game over
+      board[i].revealed=true;
+      addLog(`💀 Mauvaise carte ! "${board[i].name}" — défaite !`);
+      gameOver=true;
+      exitSurvivalMode();
+      showWin(turn==='blue'?'red':'blue', false, true);
+      updateUI();
+    }
+    return;
+  }
+
+  if(!hintActive){addLog('⚠️ L\'Architecte doit d\'abord donner un indice !');return;}
+
+  board[i].revealed=true;
+  const c=board[i];
+
+  if(c.team==='assassin'||c.team==='assassin2'){
+    addLog(`💀 "${c.name}" — PIÈGE ! L'Architecte connaît le mot de survie…`);
+    enterSurvivalMode(turn);
+    return;
+  }
+
+  if(c.team==='blue'){
+    blueLeft--;
+    addLog(`🔵 "${c.name}" — Correct pour Bleu !`);
+    if(blueLeft===0){gameOver=true;showWin('blue');updateUI();return;}
+    if(turn!=='blue') guessesLeft=0;
+  } else if(c.team==='red'){
+    redLeft--;
+    addLog(`🔴 "${c.name}" — Correct pour Rouge !`);
+    if(redLeft===0){gameOver=true;showWin('red');updateUI();return;}
+    if(turn!=='red') guessesLeft=0;
+  } else {
+    addLog(`⚪ "${c.name}" — Neutre. Fin du tour.`);
+    guessesLeft=0;
+  }
+
+  if(c.team===turn){
+    guessesLeft--;
+    if(guessesLeft<=0){
+      addLog(`↩️ Tour de ${turn==='blue'?'Rouge':'Bleu'}.`);
+      switchTurn();
+    }
+  } else {
+    switchTurn();
+  }
+  updateUI();
+}
+
+function switchTurn(){
+  turn=turn==='blue'?'red':'blue';
+  hintActive=false;guessesLeft=0;
+  document.getElementById('hintDisplay').textContent='';
+}
+
+function passTurn(){
+  if(gameOver||survivalMode) return;
+  addLog(`⏭️ ${turn==='blue'?'Bleu':'Rouge'} passe son tour.`);
+  switchTurn();updateUI();
+}
+
+function giveHint(){
+  if(gameOver||survivalMode) return;
+  const word=document.getElementById('hintWord').value.trim();
+  const num=parseInt(document.getElementById('hintNum').value)||0;
+  if(!word){addLog('⚠️ Entrez un indice !');return;}
+  hintActive=true;guessesLeft=num+1;
+  document.getElementById('hintDisplay').textContent=`🔎 "${word.toUpperCase()}" → ${num}`;
+  document.getElementById('hintWord').value='';
+  addLog(`💡 Architecte ${turn==='blue'?'Bleu':'Rouge'} : "${word}" pour ${num} carte(s)`);
+}
+
+function toggleSpy(){
+  spyMode=document.getElementById('spyToggle').checked;
+  updateRescueVisibility();
+  renderGrid();
+}
+
+function showWin(winner, byCards=true, failedSurvival=false){
+  const title=document.getElementById('modalTitle');
+  const msg=document.getElementById('modalMsg');
+  title.innerHTML=`<span class="winner-${winner}">${winner==='blue'?'🔵 Bleu':'🔴 Rouge'} gagne !</span>`;
+  if(failedSurvival)
+    msg.textContent=`L'équipe ${winner==='blue'?'Rouge':'Bleue'} a raté son mot de survie après le Piège.`;
+  else if(byCards)
+    msg.textContent=`Toutes les cartes ${winner==='blue'?'bleues':'rouges'} ont été trouvées !`;
+  else
+    msg.textContent=`L'équipe adverse a révélé un Piège et n'a pas survécu !`;
+  document.getElementById('modal').classList.add('show');
+}
+
+function startGame(){document.getElementById('splash').classList.add('hidden');initBoard();}
+function newGame(){document.getElementById('modal').classList.remove('show');initBoard();}
+
+initBoard();
+</script>
+</body>
+</html>
