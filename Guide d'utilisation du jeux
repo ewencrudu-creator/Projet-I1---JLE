@@ -1,2 +1,124 @@
-Le Jeux : un codename educatif
-Nombre de joueur : 4 
+CodeNoms — Règles du jeu
+
+Le concept
+
+CodeNoms est un jeu de plateau éducatif inspiré de Codenames, adapté au thème de l'économie collaborative et des communautés en ligne. 
+Le but : assembler les Briques de l'Écosystème de votre équipe avant l'équipe adverse.
+
+Le jeu utilise un pool de 90+ mots classés par catégories thématiques (Plateformes, Rôles, Valeurs, P2P, Actions, Contributions, Droits, Statuts, Techniques). Chaque carte affiche un mot, une icône illustrative et un code couleur correspondant à sa catégorie pour aider les joueurs à repérer les familles thématiques.
+
+---
+
+Les rôles
+
+Le vocabulaire classique de Codenames est remplacé pour coller à l'univers collaboratif :
+
+CodeNoms 
+|---|---|
+| Maître-Espion --> Coordinateur 
+| Joueurs / Agents --> La Communauté
+| Équipe --> Communauté Bleue / Communauté Rouge
+| Carte Assassin --> Mot Piège
+| Deviner les mots --> Assembler les Briques de l'Écosystème
+
+Chaque partie se joue en 2 équipes de 2 à 4+ joueurs. Chaque équipe désigne un Coordinateur qui sera le seul à voir la grille secrète. Les autres joueurs forment la Communauté.
+
+---
+
+Mise en place
+
+Une grille de 25 cartes est générée aléatoirement parmi le pool de 90+ mots. Les cartes sont réparties secrètement ainsi :
+
+- 🔵 9 Briques bleues — appartiennent à la Communauté Bleue
+- 🔴 8 Briques rouges — appartiennent à la Communauté Rouge
+- ⚪ 6 cartes neutres — n'appartiennent à personne
+- 💀 2 Mots Pièges — les mots interdits de l'écosystème (ex : Monopole et Centralisation)
+
+Seuls les Coordinateurs voient la répartition secrète des couleurs. La Communauté Bleue commence toujours (c'est pourquoi elle a 9 briques contre 8).
+
+---
+
+Déroulement d'un tour
+
+1. Le Coordinateur donne un indice
+
+Le Coordinateur de l'équipe active donne un indice composé de :
+- Un seul mot (qui n'est pas sur la grille)
+- Un chiffre indiquant combien de cartes sont liées à cet indice
+
+Exemple : le Coordinateur Bleu dit « Partage, 3 » pour faire deviner Wikipedia, GitHub et Torrent.*
+
+2. La Communauté devine
+
+Les membres de la Communauté discutent entre eux puis désignent une carte. On la retourne pour révéler sa couleur :
+
+- ✅ Brique de votre couleur → bien joué ! Vous pouvez continuer à deviner (maximum = chiffre + 1 tentatives)
+- ⚪ Carte neutre → votre tour s'arrête immédiatement
+- ❌ Brique adverse → vous offrez un point à l'adversaire, votre tour s'arrête
+- 💀 Mot Piège → DANGER ! Le mécanisme de Seconde Chance s'active (voir ci-dessous)
+
+La Communauté peut choisir de **passer son tour** à tout moment si elle hésite.
+
+---
+
+Les 2 Mots Pièges
+
+Contrairement au Codenames classique (1 seul assassin = défaite immédiate), CodeNoms comporte 2 Mots Pièges,pour augmenter la tension.
+
+Le mécanisme de Seconde Chance
+
+Quand une équipe révèle un Mot Piège, elle ne perd pas immédiatement. Au lieu de cela :
+
+Premier Mot Piège révélé → L'équipe reçoit un Défi de survie :
+- Le Coordinateur adverse pose une question de culture générale liée au thème du jeu (communautés en ligne, économie collaborative, production pair-à-pair, etc.)
+- Si la Communauté répond correctement : elle survit mais son tour s'arrête immédiatement
+- Si la Communauté se trompe : elle perd la partie
+
+Deuxième Mot Piège révélé (par la même équipe ou l'autre) → Défaite immédiate, pas de seconde chance.
+
+Cela signifie qu'au total, le premier Piège est une alarme, le second est fatal.
+
+---
+
+Conditions de victoire
+
+Une équipe gagne si :
+
+1. Toutes ses Briques sont assemblées — sa Communauté a trouvé ses 9 (ou 8) cartes
+2. L'équipe adverse tombe sur le 2ème Mot Piège — ou échoue au Défi de survie du 1er Piège
+
+---
+
+Récapitulatif des catégories de cartes
+
+Chaque carte appartient à une catégorie identifiable par sa couleur et son icône :
+
+| Catégorie | Couleur | Icône | Exemples |
+|---|---|---|---|
+| Plateforme | 🔵 Bleu | Écran | Wikipedia, GitHub, Discord |
+| Rôle | 🟣 Violet | Silhouette | Modérateur, Mentor, Troll |
+| Droit | 🟡 Jaune | Balance | Copyright, Licence, Liberté |
+| Valeur | 🟢 Vert | Cœur | Partage, Collaboration, Confiance |
+| P2P | 🔴 Corail | Réseau | Blockchain, Torrent, Anonymat |
+| Action | 🩷 Rose | Éclair | Like, Commenter, Signaler |
+| Contribution | 🩵 Cyan | Crayon | Documentation, Traduction, Fusion |
+| Statut | 🟢 Lime | Cadenas | Ouvert, Fermé, Public, Privé |
+| Technique | ⚫ Gris | Engrenage | Serveur, Forum, Mot de passe |
+
+Ces catégories sont un outil stratégique pour le Coordinateur : il peut formuler des indices qui ciblent des cartes d'une même famille thématique.
+
+---
+
+Conseils pour le Coordinateur
+
+- Exploitez les catégories : un indice comme « Modération, 2 » peut viser à la fois Modérateur et Signaler
+- Évitez les indices qui pourraient orienter vers un Mot Piège ou une carte adverse
+- Le chiffre 0 est autorisé : il signifie « aucune carte n'est liée, mais ce mot vous aide à éviter un piège »
+- Pensez aux liens entre catégories : Partage (Valeur) et Torrent (P2P) partagent un concept commun
+
+---
+
+Le Coordinateur active le **mode Coordinateur** (toggle en haut de l'écran) pour voir la grille secrète. Il doit cacher son écran de la Communauté.
+
+---
+
