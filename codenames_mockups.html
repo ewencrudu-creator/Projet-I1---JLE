@@ -1,0 +1,248 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font-sans)}
+.wrap{display:flex;flex-direction:column;gap:32px;padding:16px 0}
+.label{font-size:12px;color:var(--color-text-secondary);margin-bottom:8px;font-weight:500}
+.screen{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);overflow:hidden;width:100%}
+
+/* TOP BAR */
+.topbar{background:#0f1520;display:flex;align-items:center;justify-content:space-between;padding:8px 12px;gap:8px;flex-wrap:wrap}
+.logo{font-family:var(--font-mono);font-size:11px;font-weight:500;color:#fff}
+.logo .b{color:#4f8ef7}.logo .r{color:#f75f4f}
+.scores{display:flex;gap:8px;align-items:center}
+.pill{padding:3px 10px;border-radius:20px;font-size:10px;font-weight:500}
+.pill.blue{background:#172040;color:#4f8ef7}
+.pill.red{background:#401717;color:#f75f4f}
+.pill.turn{background:#172040;color:#4f8ef7;border:1px solid #4f8ef7}
+.btns{display:flex;gap:5px}
+.btn-sm{background:transparent;border:0.5px solid rgba(255,255,255,.2);color:#aaa;font-size:9px;padding:3px 8px;border-radius:5px;cursor:pointer}
+
+/* ARCH BAR */
+.archbar{background:#0f1116;display:flex;align-items:center;justify-content:center;gap:8px;padding:5px 12px}
+.arch-label{font-size:10px;color:#f5c842;font-weight:500}
+.toggle-wrap{display:flex;align-items:center;gap:6px;font-size:9px;color:#5a6a8a}
+.toggle-bg{width:30px;height:16px;background:#2d3748;border-radius:8px;position:relative;cursor:pointer}
+.toggle-dot{width:12px;height:12px;background:#4a5568;border-radius:50%;position:absolute;top:2px;left:2px;transition:.2s}
+.toggle-bg.on{background:#f5c842}.toggle-bg.on .toggle-dot{left:16px;background:#fff}
+
+/* HINT BAR */
+.hintbar{background:#151e2e;display:flex;align-items:center;justify-content:center;gap:8px;padding:6px 12px;border-bottom:0.5px solid rgba(255,255,255,.05)}
+.hint-input{background:#0f1520;border:0.5px solid rgba(255,255,255,.1);color:#dde4f0;padding:4px 10px;border-radius:5px;font-size:10px;width:110px;font-family:var(--font-mono)}
+.hint-num{width:40px;text-align:center;background:#0f1520;border:0.5px solid rgba(255,255,255,.1);color:#dde4f0;padding:4px;border-radius:5px;font-size:10px;font-family:var(--font-mono)}
+.btn-give{background:linear-gradient(135deg,#4f8ef7,#7c6ef7);color:#fff;border:none;padding:4px 10px;border-radius:5px;font-size:9px;font-weight:500;cursor:pointer}
+.hint-show{font-family:var(--font-mono);font-size:10px;color:#f5c842;font-weight:500}
+
+/* GRID */
+.grid{display:grid;grid-template-columns:repeat(5,1fr);gap:5px;padding:8px;background:#07090f}
+.card{border-radius:7px;overflow:hidden;border:1.5px solid rgba(255,255,255,.07);background:#151e2e;cursor:pointer;position:relative}
+.card-img{height:44px;display:flex;align-items:center;justify-content:center;font-size:18px}
+.card-txt{padding:3px 2px 4px;text-align:center;background:#151e2e}
+.card-name{font-size:8px;font-weight:500;color:#dde4f0;line-height:1.2}
+.card-cat{font-size:6.5px;color:#3a4a66;margin-top:1px}
+
+.card.blue{border-color:#4f8ef7}.card.blue .card-img{background:#172040}.card.blue .card-name{color:#4f8ef7}
+.card.red{border-color:#f75f4f}.card.red .card-img{background:#401717}.card.red .card-name{color:#f75f4f}
+.card.neutral{opacity:.4}.card.neutral .card-img{background:#1e2535}.card.neutral .card-name{color:#64748b}
+.card.piege{border-color:#dc2626}.card.piege .card-img{background:#2d0000}.card.piege .card-name{color:#ef4444;text-decoration:line-through}
+.card.spy-blue{border-color:#4f8ef7;box-shadow:0 0 6px rgba(79,142,247,.3)}
+.card.spy-blue::after{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:#4f8ef7}
+.card.spy-red{border-color:#f75f4f;box-shadow:0 0 6px rgba(247,95,79,.3)}
+.card.spy-red::after{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:#f75f4f}
+.card.spy-piege{border-color:#dc2626}
+.card.spy-piege .card-img{background:repeating-linear-gradient(45deg,#151e2e,#151e2e 3px,rgba(220,38,38,.08) 3px,rgba(220,38,38,.08) 6px)}
+.card.rescue{border-color:#f5c842;box-shadow:0 0 10px rgba(245,200,66,.5)}
+
+/* LOG */
+.logbar{background:#0f1520;padding:5px 12px;font-size:9px;color:#3a4a66;font-family:var(--font-mono);border-top:0.5px solid rgba(255,255,255,.04);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.logbar .last{color:#7a8aaa}
+
+/* SURVIVAL BANNER */
+.survival{background:rgba(220,38,38,.12);border-top:1.5px solid #dc2626;border-bottom:1.5px solid #dc2626;padding:5px 12px;display:flex;align-items:center;justify-content:center;gap:8px;font-size:9px;color:#ef4444;font-weight:500}
+.rescue-word{background:rgba(251,191,36,.12);border:1px solid rgba(251,191,36,.3);color:#fbbf24;padding:2px 8px;border-radius:4px;font-family:var(--font-mono);font-size:9px}
+
+/* SPLASH */
+.splash{background:#07090f;padding:20px;display:flex;flex-direction:column;align-items:center;gap:12px}
+.splash-title{font-size:28px;font-weight:500;letter-spacing:-1px}
+.splash-sub{font-size:10px;color:#7a8aaa;text-align:center;max-width:280px;line-height:1.6}
+.rules-box{background:#0f1520;border:0.5px solid rgba(255,255,255,.07);border-radius:8px;padding:12px;width:100%;max-width:320px;font-size:9px;line-height:1.8;color:#7a8aaa}
+.rules-box strong{color:#dde4f0}
+.dot{display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:3px;vertical-align:-1px}
+.dot.b{background:#4f8ef7}.dot.r{background:#f75f4f}.dot.n{background:#64748b}.dot.p{background:#1a0000;border:1.5px solid #dc2626}
+.rules-grid{display:grid;grid-template-columns:1fr 1fr;gap:5px;margin-top:8px}
+.rule-item{background:#151e2e;border-radius:5px;padding:5px 7px;border:0.5px solid rgba(255,255,255,.05)}
+.rule-title{color:#dde4f0;font-size:8px;font-weight:500;margin-bottom:2px}
+.badge-new{background:#f97316;color:#fff;font-size:6px;padding:1px 4px;border-radius:3px;margin-left:3px}
+.btn-start{background:linear-gradient(135deg,#4f8ef7,#7c6ef7);color:#fff;border:none;padding:8px 22px;border-radius:8px;font-size:10px;font-weight:500;cursor:pointer}
+.role-chips{display:flex;gap:6px}
+.chip{font-size:8px;padding:3px 8px;border-radius:10px;font-weight:500}
+.chip.arch{background:rgba(245,200,66,.1);color:#f5c842;border:0.5px solid rgba(245,200,66,.2)}
+.chip.exp{background:rgba(79,142,247,.1);color:#4f8ef7;border:0.5px solid rgba(79,142,247,.2)}
+
+/* section title */
+.stitle{font-size:13px;font-weight:500;color:var(--color-text-primary);margin-bottom:4px;margin-top:8px}
+.sdesc{font-size:11px;color:var(--color-text-secondary);margin-bottom:8px;line-height:1.5}
+</style>
+
+<div class="wrap">
+
+<!-- ÉCRAN 1 : SPLASH -->
+<div>
+<p class="stitle">1. Écran d'accueil</p>
+<p class="sdesc">Règles + bouton pour lancer la partie.</p>
+<div class="screen">
+<div class="splash">
+  <div class="splash-title" style="color:#dde4f0"><span style="color:#4f8ef7">Code</span>Noms</div>
+  <p class="splash-sub">Jeu Codenames sur les <strong style="color:#dde4f0">communautés en ligne</strong> et la production pair-à-pair</p>
+  <div class="rules-box">
+    <strong>Règles :</strong><br>
+    Deux équipes : <span class="dot b"></span><strong>Bleu</strong> et <span class="dot r"></span><strong>Rouge</strong>.<br>
+    L'<strong>Architecte</strong> voit la grille secrète et donne un indice (mot + chiffre).<br>
+    Les <strong>Explorateurs</strong> devinent les cartes.<br>
+    <div class="rules-grid">
+      <div class="rule-item"><div class="rule-title"><span class="dot b"></span>9 cartes bleues</div>À trouver en premier</div>
+      <div class="rule-item"><div class="rule-title"><span class="dot r"></span>8 cartes rouges</div>Pour l'adversaire</div>
+      <div class="rule-item"><div class="rule-title"><span class="dot n"></span>6 neutres</div>Fin du tour</div>
+      <div class="rule-item"><div class="rule-title"><span class="dot p"></span>2 Pièges<span class="badge-new">NOUVEAU</span></div>Seconde chance !</div>
+    </div>
+  </div>
+  <div class="role-chips">
+    <div class="chip arch">Architecte — voit la grille</div>
+    <div class="chip exp">Explorateur — devine</div>
+  </div>
+  <button class="btn-start">Commencer la partie</button>
+</div>
+</div>
+</div>
+
+<!-- ÉCRAN 2 : JEU EXPLORATEUR -->
+<div>
+<p class="stitle">2. Vue Explorateur</p>
+<p class="sdesc">Ce que voit l'équipe qui devine. Les cartes n'ont pas de couleur — juste les mots et les images.</p>
+<div class="screen">
+  <div class="topbar">
+    <div class="logo"><span class="b">&lt;</span>CodeNoms<span class="r">/&gt;</span></div>
+    <div class="scores">
+      <div class="pill blue">Bleu : 9</div>
+      <div class="pill turn">Tour : Bleu</div>
+      <div class="pill red">Rouge : 8</div>
+    </div>
+    <div class="btns"><button class="btn-sm">Passer</button><button class="btn-sm">Nouvelle</button></div>
+  </div>
+  <div class="archbar">
+    <div class="toggle-wrap">Explorateurs</div>
+    <span style="color:#3a4a66;font-size:9px">·</span>
+    <div class="arch-label">Architecte</div>
+    <div class="toggle-bg"><div class="toggle-dot"></div></div>
+  </div>
+  <div class="hintbar">
+    <div class="hint-input" style="color:#3a4a66">Votre indice…</div>
+    <div class="hint-num">2</div>
+    <button class="btn-give">Donner l'indice</button>
+  </div>
+  <div class="grid">
+    <div class="card"><div class="card-img">🌐</div><div class="card-txt"><div class="card-name">Wikipedia</div><div class="card-cat">Plateformes</div></div></div>
+    <div class="card"><div class="card-img">💻</div><div class="card-txt"><div class="card-name">GitHub</div><div class="card-cat">Plateformes</div></div></div>
+    <div class="card"><div class="card-img">🐧</div><div class="card-txt"><div class="card-name">Linux</div><div class="card-cat">Logiciels</div></div></div>
+    <div class="card"><div class="card-img">👤</div><div class="card-txt"><div class="card-name">Contributeur</div><div class="card-cat">Rôles</div></div></div>
+    <div class="card"><div class="card-img">🤝</div><div class="card-txt"><div class="card-name">Collaboration</div><div class="card-cat">Valeurs</div></div></div>
+    <div class="card"><div class="card-img">⚙️</div><div class="card-txt"><div class="card-name">Protocole</div><div class="card-cat">Technique</div></div></div>
+    <div class="card"><div class="card-img">✏️</div><div class="card-txt"><div class="card-name">Fusion</div><div class="card-cat">Travail</div></div></div>
+    <div class="card"><div class="card-img">⚖️</div><div class="card-txt"><div class="card-name">Licence</div><div class="card-cat">Droit</div></div></div>
+    <div class="card"><div class="card-img">🔗</div><div class="card-txt"><div class="card-name">Blockchain</div><div class="card-cat">Technique</div></div></div>
+    <div class="card"><div class="card-img">👥</div><div class="card-txt"><div class="card-name">Forum</div><div class="card-cat">Plateformes</div></div></div>
+    <div class="card"><div class="card-img">✨</div><div class="card-txt"><div class="card-name">Vote</div><div class="card-cat">Gouvernance</div></div></div>
+    <div class="card"><div class="card-img">💡</div><div class="card-txt"><div class="card-name">Consensus</div><div class="card-cat">Gouvernance</div></div></div>
+    <div class="card"><div class="card-img">🔓</div><div class="card-txt"><div class="card-name">Ouvert</div><div class="card-cat">Économie</div></div></div>
+    <div class="card"><div class="card-img">👤</div><div class="card-txt"><div class="card-name">Modérateur</div><div class="card-cat">Rôles</div></div></div>
+    <div class="card"><div class="card-img">💰</div><div class="card-txt"><div class="card-name">Gratuit</div><div class="card-cat">Économie</div></div></div>
+  </div>
+  <div class="logbar"><span class="last">Partie prête — Équipe Bleu commence !</span></div>
+</div>
+</div>
+
+<!-- ÉCRAN 3 : MODE ARCHITECTE -->
+<div>
+<p class="stitle">3. Vue Architecte</p>
+<p class="sdesc">Mode activé : les couleurs secrètes apparaissent sur les cartes. L'Architecte voit tout, les Explorateurs non.</p>
+<div class="screen">
+  <div class="topbar">
+    <div class="logo"><span class="b">&lt;</span>CodeNoms<span class="r">/&gt;</span></div>
+    <div class="scores">
+      <div class="pill blue">Bleu : 7</div>
+      <div class="pill turn">Tour : Bleu</div>
+      <div class="pill red">Rouge : 6</div>
+    </div>
+    <div class="btns"><button class="btn-sm">Passer</button><button class="btn-sm">Nouvelle</button></div>
+  </div>
+  <div class="archbar">
+    <div class="toggle-wrap">Explorateurs</div>
+    <span style="color:#3a4a66;font-size:9px">·</span>
+    <div class="arch-label">Architecte</div>
+    <div class="toggle-bg on"><div class="toggle-dot"></div></div>
+    <span style="font-size:8px;color:#f5c842">actif</span>
+  </div>
+  <div class="hintbar">
+    <div class="hint-input" style="color:#3a4a66">Votre indice…</div>
+    <div class="hint-num">2</div>
+    <button class="btn-give">Donner l'indice</button>
+    <div class="hint-show">🔎 "PARTAGE" → 2</div>
+  </div>
+  <div class="grid">
+    <div class="card spy-blue"><div class="card-img" style="background:#172040">🌐</div><div class="card-txt" style="background:#172040"><div class="card-name" style="color:#4f8ef7">Wikipedia</div><div class="card-cat">Plateformes</div></div></div>
+    <div class="card spy-red"><div class="card-img" style="background:#401717">💻</div><div class="card-txt" style="background:#401717"><div class="card-name" style="color:#f75f4f">GitHub</div><div class="card-cat">Plateformes</div></div></div>
+    <div class="card spy-blue"><div class="card-img" style="background:#172040">🐧</div><div class="card-txt" style="background:#172040"><div class="card-name" style="color:#4f8ef7">Linux</div><div class="card-cat">Logiciels</div></div></div>
+    <div class="card" style="opacity:.5"><div class="card-img">👤</div><div class="card-txt"><div class="card-name" style="color:#64748b">Contributeur</div><div class="card-cat">Rôles</div></div></div>
+    <div class="card spy-blue"><div class="card-img" style="background:#172040">🤝</div><div class="card-txt" style="background:#172040"><div class="card-name" style="color:#4f8ef7">Collaboration</div><div class="card-cat">Valeurs</div></div></div>
+    <div class="card spy-red"><div class="card-img" style="background:#401717">⚙️</div><div class="card-txt" style="background:#401717"><div class="card-name" style="color:#f75f4f">Protocole</div><div class="card-cat">Technique</div></div></div>
+    <div class="card spy-red"><div class="card-img" style="background:#401717">✏️</div><div class="card-txt" style="background:#401717"><div class="card-name" style="color:#f75f4f">Fusion</div><div class="card-cat">Travail</div></div></div>
+    <div class="card spy-piege"><div class="card-img">⚖️</div><div class="card-txt"><div class="card-name" style="color:#ef4444">Licence</div><div class="card-cat" style="color:#ef4444">PIÈGE</div></div></div>
+    <div class="card spy-blue"><div class="card-img" style="background:#172040">🔗</div><div class="card-txt" style="background:#172040"><div class="card-name" style="color:#4f8ef7">Blockchain</div><div class="card-cat">Technique</div></div></div>
+    <div class="card" style="opacity:.5"><div class="card-img">👥</div><div class="card-txt"><div class="card-name" style="color:#64748b">Forum</div><div class="card-cat">Rôles</div></div></div>
+    <div class="card spy-red"><div class="card-img" style="background:#401717">✨</div><div class="card-txt" style="background:#401717"><div class="card-name" style="color:#f75f4f">Vote</div><div class="card-cat">Gouvernance</div></div></div>
+    <div class="card spy-blue"><div class="card-img" style="background:#172040">💡</div><div class="card-txt" style="background:#172040"><div class="card-name" style="color:#4f8ef7">Consensus</div><div class="card-cat">Gouvernance</div></div></div>
+    <div class="card spy-piege"><div class="card-img">🔓</div><div class="card-txt"><div class="card-name" style="color:#ef4444">Ouvert</div><div class="card-cat" style="color:#ef4444">PIÈGE</div></div></div>
+    <div class="card" style="opacity:.5"><div class="card-img">👤</div><div class="card-txt"><div class="card-name" style="color:#64748b">Modérateur</div><div class="card-cat">Rôles</div></div></div>
+    <div class="card spy-blue"><div class="card-img" style="background:#172040">💰</div><div class="card-txt" style="background:#172040"><div class="card-name" style="color:#4f8ef7">Gratuit</div><div class="card-cat">Économie</div></div></div>
+  </div>
+  <div class="logbar"><span class="last">Architecte Bleu : "PARTAGE" pour 2 carte(s)</span></div>
+</div>
+</div>
+
+<!-- ÉCRAN 4 : MODE SURVIE / PIÈGE -->
+<div>
+<p class="stitle">4. Écran Piège — seconde chance</p>
+<p class="sdesc">Quand un Piège est révélé. L'Architecte voit le mot de survie (en mode Architecte activé), les Explorateurs doivent deviner.</p>
+<div class="screen">
+  <div class="topbar">
+    <div class="logo"><span class="b">&lt;</span>CodeNoms<span class="r">/&gt;</span></div>
+    <div class="scores">
+      <div class="pill blue">Bleu : 5</div>
+      <div class="pill" style="background:rgba(220,38,38,.2);color:#ef4444;border:1px solid #ef4444">SURVIE — Bleu</div>
+      <div class="pill red">Rouge : 5</div>
+    </div>
+    <div class="btns"><button class="btn-sm">Passer</button></div>
+  </div>
+  <div class="survival">
+    <span>PIÈGE touché !</span>
+    <span style="color:#7a8aaa">Mot de survie (Architecte uniquement) :</span>
+    <div class="rescue-word">Réseau</div>
+    <span style="color:#7a8aaa">— 1 essai !</span>
+  </div>
+  <div class="grid">
+    <div class="card blue"><div class="card-img" style="background:#c8deff">🌐</div><div class="card-txt" style="background:#172040"><div class="card-name" style="color:#4f8ef7">Wikipedia</div><div class="card-cat">Révélé</div></div></div>
+    <div class="card piege"><div class="card-img" style="background:#2d0000">⚖️</div><div class="card-txt" style="background:#1a0000"><div class="card-name">Licence</div><div class="card-cat" style="color:#ef4444">PIÈGE</div></div></div>
+    <div class="card"><div class="card-img">💡</div><div class="card-txt"><div class="card-name">Consensus</div><div class="card-cat">Gouvernance</div></div></div>
+    <div class="card rescue"><div class="card-img">⚙️</div><div class="card-txt"><div class="card-name">Réseau</div><div class="card-cat" style="color:#fbbf24">mot de survie</div></div></div>
+    <div class="card"><div class="card-img">✨</div><div class="card-txt"><div class="card-name">Vote</div><div class="card-cat">Gouvernance</div></div></div>
+    <div class="card"><div class="card-img">🤝</div><div class="card-txt"><div class="card-name">Collaboration</div><div class="card-cat">Valeurs</div></div></div>
+    <div class="card"><div class="card-img">🔗</div><div class="card-txt"><div class="card-name">Blockchain</div><div class="card-cat">Technique</div></div></div>
+    <div class="card"><div class="card-img">🐧</div><div class="card-txt"><div class="card-name">Linux</div><div class="card-cat">Logiciels</div></div></div>
+    <div class="card"><div class="card-img">👥</div><div class="card-txt"><div class="card-name">Forum</div><div class="card-cat">Plateformes</div></div></div>
+    <div class="card"><div class="card-img">💰</div><div class="card-txt"><div class="card-name">Gratuit</div><div class="card-cat">Économie</div></div></div>
+  </div>
+  <div class="logbar"><span style="color:#ef4444">PIÈGE touché ! L'Architecte connaît le mot de survie — 1 essai !</span></div>
+</div>
+</div>
+
+</div>
