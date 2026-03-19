@@ -11,8 +11,8 @@ L'objectif est de transformer les mécaniques du célèbre jeu *Codenames* pour 
 | Nom | Rôle | Responsabilités |
 | :--- | :--- | :--- |
 | **Ewen CRUDU** | **Project Manager (PM)** | Planification (GitHub Projects), rédaction de la documentation, validation des livrables et respect du thème économique. |
-| **Lucas PIRES** | **Lead Developer** | Architecture technique, intégration des données JSON, logique de jeu et gestion du code source. |
-| **Julien GAMEIRO** | **UX/UI Designer** | Design de l'interface, expérience utilisateur, charte graphique et contenu pédagogique des cartes. |
+| **Lucas PIRES** | **Tester et Developer** | Architecture technique, expérience utilisateur, logique de jeu et gestion du code source. |
+| **Julien GAMEIRO** | **Designer et Codeur** | Design de l'interface, expérience utilisateur, intégration des données JSON, charte graphique et contenu pédagogique des cartes. |
 
 ---
 
@@ -29,9 +29,9 @@ Pour garantir une collaboration transparente et efficace, l'équipe suit ce work
 ## État d'avancement
 - [x] Initialisation du répertoire
 - [x] Définition des rôles
-- [ ] Structuration du fichier JSON de données (en cours)
-- [ ] Maquettes de l'interface (UI)
-- [ ] Développement du moteur de jeu
+- [x] Structuration du fichier JSON de données (en cours)
+- [x] Maquettes de l'interface (UI)
+- [x] Développement du jeu
 - [ ] Phase de test et déploiement
 
 ---
